@@ -1,6 +1,6 @@
 import Rcon from "rcon";
 
-function sendRcon(cmd: string, params?: Record<string, string | number>) {
+export function sendRcon(cmd: string, params?: Record<string, string | number>) {
   return new Promise((resolve, reject) => {
     const location = process.env.RCON_LOCATION || "";
     const pwd = process.env.RCON_ADMIN_PASSWORD || "";

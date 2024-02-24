@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import styles from "./layout.module.sass";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { MehOutlined, TeamOutlined } from "@ant-design/icons";
 import "./globals.css";
+import cx from "classnames";
 import { ConfigProvider } from "antd";
+import BroadCast from "@/components/Broadcast";
+import MotionBackground from "@/components/Motion";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -51,7 +53,8 @@ export default async function RootLayout({
               </nav>
             </div>
           </div>
-          <div className="flex flex-col min-h-screen">
+          <MotionBackground />
+          <div className={cx("flex flex-col min-h-screen", styles.main)}>
             <div className="flex h-[60px] items-center border-b px-4 md:px-6">
               <Button className="mr-4 rounded-full sm:hidden">
                 <MehOutlined className="w-4 h-4" />
@@ -62,6 +65,7 @@ export default async function RootLayout({
                   {result.ver} {result.name}
                 </span>
               </div>
+              <BroadCast />
             </div>
             <main className="flex-1 overflow-y-auto">
               <div className="container px-4 py-6 sm:px-6 sm:py-8 lg:px-8">

@@ -1,11 +1,12 @@
 import fetchSavedFile from "@/util/fetchSavedFile";
-import { getGroupByGroupId, saveGroup, saveGroupRelation } from "@/util/group";
-import { savePlayer, getAllPlayers, getPlayerByPlayerUId } from "@/util/player";
+import { saveGroup, saveGroupRelation } from "@/util/group";
+import { savePlayer } from "@/util/player";
 import dayjs from "dayjs";
 import path from "path";
 
 export async function GET() {
   try {
+    console.log("triggered SaveFile: Level.sav sync");
     const fileDir = process.env.SAVE_FILE_DIR || "";
     if (!fileDir) {
       throw new Error("SAVE_FILE_DIR is not set");
@@ -39,7 +40,7 @@ export async function GET() {
           talent_defense: player.Talent_Defense,
           passive_skill_list: player.PassiveSkillList.join(","),
           craft_speed: player.CraftSpeed,
-          last_login_at: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+          last_login_at: dayjs().format("YYYY-MM-DD HH:mm:ss"),
         });
       } catch (err) {
         console.log("saveplayer error: ", err);
