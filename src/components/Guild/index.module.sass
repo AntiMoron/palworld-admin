@@ -1,0 +1,32 @@
+.container
+  display: flex
+  justify-content: center
+  padding: 20px 16px
+  border: 2px solid transparent
+  background:#e4e4e7
+  flex-direction: column
+  border-radius: 10px
+  margin: 8px 0
+  transition-duration: 300ms
+  cursor: pointer
+  &:first-child
+    margin-top: 0
+  &:hover
+    opacity: 0.8
+    background:  #fff
+    border-color: #48dbfb
+  &.selected
+    background:  #fff
+    border-color: #48dbfb
+  .heading
+    width: 100%
+    display: flex
+    align-items: center
+    overflow: hidden
+    .nick
+      text-overflow: ellipsis
+      overflow: hidden
+      max-width: 100%
+
+    .tag
+      margin-left: 8px
