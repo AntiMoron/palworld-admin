@@ -1,6 +1,7 @@
 import fetchSavedFile from "@/util/fetchSavedFile";
 import { saveGroup, saveGroupRelation } from "@/util/group";
 import { savePlayer } from "@/util/player";
+import runBash from "@/util/script";
 import dayjs from "dayjs";
 import path from "path";
 
@@ -11,7 +12,8 @@ export async function GET() {
     if (!fileDir) {
       throw new Error("SAVE_FILE_DIR is not set");
     }
-    const filename = path.join(process.cwd(), fileDir);
+    const files = await runBash(`find -name 'Level.sav' ${fileDir} -exec readlink -f {} \\;`);
+    const filename = files.split("\n")?.[0];
     console.log("start to read " + filename);
     const data = await fetchSavedFile(filename);
     console.log("finish to read");

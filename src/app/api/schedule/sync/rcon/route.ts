@@ -1,5 +1,4 @@
-import { sendRcon } from "@/app/api/rcon/info/route";
-import { savePlayer } from "@/util/player";
+import sendRcon from "@/util/rcon";
 
 export async function GET() {
   console.log("triggered RCON sync");

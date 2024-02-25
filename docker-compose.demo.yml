@@ -1,0 +1,16 @@
+services:
+  admin:
+    image: ./
+    cpus: 0.5
+    network_mode: host
+    mem_limit: 256M
+    memswap_limit: 1g
+    restart: unless-stopped
+    container_name: palworld-admin
+    environment:
+      - SAVE_FILE_DIR=/game
+      - RCON_LOCATION=http://127.0.0.1:27055
+      - RCON_ADMIN_PASSWORD=your_password
+      - SAVE_SYNC_CRONTAB="*/5 * * * *"
+    volumes:
+      - /palworld/Pal/Saved/:/game

@@ -1,7 +1,7 @@
 import { exec } from "child_process";
 
 export default function runBash(bashCommand: string) {
-  return new Promise((res, rej) => {
+  return new Promise<string>((res, rej) => {
     exec(bashCommand, (error, stdout, stderr) => {
       if (error) {
         console.error(`Error: ${error.message}`);
