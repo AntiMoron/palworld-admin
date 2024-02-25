@@ -8,6 +8,7 @@ import cx from "classnames";
 import { ConfigProvider } from "antd";
 import BroadCast from "@/components/Broadcast";
 import MotionBackground from "@/components/Motion";
+import PalworldVersion from "@/components/PalworldVer";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -19,8 +20,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const info = await fetch("http://127.0.0.1:3000/api/rcon/info");
-  const result = await info.json();
   return (
     <html lang="en">
       <body>
@@ -60,11 +59,7 @@ export default async function RootLayout({
                 <MehOutlined className="w-4 h-4" />
                 <span className="sr-only">Toggle sidebar</span>
               </Button>
-              <div className={`flex-1 ${styles.header}`}>
-                <span className={styles.serverInfo}>
-                  {result.ver} {result.name}
-                </span>
-              </div>
+              <PalworldVersion />
               <BroadCast />
             </div>
             <main className="flex-1 overflow-y-auto">

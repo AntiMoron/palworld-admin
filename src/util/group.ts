@@ -20,7 +20,7 @@ export async function getGroupByGroupId(groupId: string) {
   const group = await client("game_group")
     .select()
     .where("group_id", groupId)
-    .then((r) => r?.[0]);
+    .then((r: Group[]) => r?.[0]);
   return group as Group;
 }
 
@@ -44,7 +44,7 @@ export async function saveGroupRelation(instance_id: string, group_id: string) {
   const old = await client("char_group_rel")
     .where("group_id", group_id)
     .where("instance_id", instance_id)
-    .then((r) => r?.[0]);
+    .then((r: Group[]) => r?.[0]);
   if (old) {
     return;
   } else {
