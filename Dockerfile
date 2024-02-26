@@ -3,17 +3,27 @@ FROM nikolaik/python-nodejs:python3.9-nodejs21
 WORKDIR /root
 # install python
 RUN python -m venv /root/py
+# For CN Region
+RUN pip3 config set global.index-url http://mirrors.aliyun.com/pypi/simple
+RUN pip3 config set install.trusted-host mirrors.aliyun.com
+
 RUN /root/py/bin/pip install palworld-save-tools
 RUN echo "export PATH=$PATH:/root/py/bin" >> /root/.bashrc
 
 # cache node_modules by package.json
 COPY ./package.json /root/
 RUN npm install
+COPY ./ /root/
+# For CN Region
+# aliyun source
+# RUN npm config set registry https://registry.npm.taobao.org
+# tencent source
+RUN npm config set registry http://mirrors.cloud.tencent.com/npm/
+RUN npm install
 # sync codes
 COPY ./ /root/
-
 ARG save_file_dir=/game
-ARG rcon_location=http://127.0.0.1:1234
+ARG rcon_location=127.0.0.1:1234
 ARG rcon_admin_password=1234
 ARG max_old_space_size=256
 ARG rcon_sync_crontab="*/1 * * * *"
@@ -29,9 +39,9 @@ ENV SAVE_SYNC_CRONTAB=$save_sync_crontab
 # build it
 RUN npm run build
 # generate crontab
-RUN scripts/cron.sh
+RUN bash ./scripts/cron.sh
 # create db
-RUN scripts/init_db.sh
+RUN bash ./scripts/init_db.sh
 
 RUN cp ./sync.cron /etc/cron.d/sync.cron
 

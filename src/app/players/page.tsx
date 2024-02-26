@@ -19,7 +19,11 @@ export default function Component(props: any) {
   const [curPlayer, setCurPlayer] = useState<undefined | Player>();
   const router = useRouter();
   useEffect(() => {
-    fetch("/api/players?isPlayer=true", {})
+    fetch("/api/players?isPlayer=true", {
+      next: {
+        revalidate: 0,
+      },
+    })
       .then((res) => res.json())
       .then((data) => {
         setPlayers(data);
@@ -35,7 +39,14 @@ export default function Component(props: any) {
     if (!curPlayer) {
       return;
     }
-    fetch(`/api/players?ownerId=${curPlayer?.player_uid || ""}&isPlayer=false`)
+    fetch(
+      `/api/players?ownerId=${curPlayer?.player_uid || ""}&isPlayer=false`,
+      {
+        next: {
+          revalidate: 0,
+        },
+      }
+    )
       .then((res) => res.json())
       .then((pals) => {
         setPals(pals);

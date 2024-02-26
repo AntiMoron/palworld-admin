@@ -17,7 +17,11 @@ export default function Component(props: any) {
   const [players, setPlayers] = useState<Player[] | undefined>();
   const [curGroup, setCurGroup] = useState<undefined | Group>();
   useEffect(() => {
-    fetch("/api/group", {})
+    fetch("/api/group", {
+      next: {
+        revalidate: 0,
+      },
+    })
       .then((res) => res.json())
       .then((data) => {
         setGroups(data);
@@ -35,7 +39,11 @@ export default function Component(props: any) {
     if (!curGroup) {
       return;
     }
-    fetch(`/api/players?isPlayer=true&groupId=${curGroup?.group_id}`)
+    fetch(`/api/players?isPlayer=true&groupId=${curGroup?.group_id}`, {
+      next: {
+        revalidate: 0,
+      },
+    })
       .then((r) => r.json())
       .then((data) => {
         setPlayers(data);

@@ -14,7 +14,7 @@ export default function BroadCast() {
           setShowModal(true);
         }}
       >
-        BoardCast
+        Broadcast
       </Button>
       <Modal
         open={showModal}
@@ -26,7 +26,7 @@ export default function BroadCast() {
       >
         <Form
           form={form}
-          onFinish={(values) => {
+          onFinish={(values: any) => {
             const { message } = values;
             // Palworld server not supporting space in messages yet.
             const compatible = message.replace(/\s+/g, "_");
@@ -38,6 +38,9 @@ export default function BroadCast() {
                   MessageText: compatible,
                 },
               }),
+              next: {
+                revalidate: 0,
+              },
               headers: {
                 "Content-Type": "application/json",
               },

@@ -9,7 +9,7 @@ services:
     container_name: palworld-admin
     environment:
       - SAVE_FILE_DIR=/game
-      - RCON_LOCATION=http://127.0.0.1:27055
+      - RCON_LOCATION=127.0.0.1:27055
       - RCON_ADMIN_PASSWORD=your_password
       - SAVE_SYNC_CRONTAB="*/5 * * * *"
     volumes:

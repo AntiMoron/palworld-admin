@@ -9,10 +9,13 @@ export async function GET() {
   try {
     console.log("triggered SaveFile: Level.sav sync");
     const fileDir = process.env.SAVE_FILE_DIR || "";
+    console.log("SAVE_FILE_DIR", process.env.SAVE_FILE_DIR);
     if (!fileDir) {
       throw new Error("SAVE_FILE_DIR is not set");
     }
-    const files = await runBash(`find -name 'Level.sav' ${fileDir} -exec readlink -f {} \\;`);
+    const files = await runBash(
+      `find -name 'Level.sav' ${fileDir} -exec readlink -f {} \\;`
+    );
     const filename = files.split("\n")?.[0];
     console.log("start to read " + filename);
     const data = await fetchSavedFile(filename);

@@ -5,10 +5,16 @@ import styles from "./index.module.sass";
 interface Props {}
 
 export default function PalworldVersion(props: Props) {
-  const [info, setInfo] = useState<{ ver: string; name: string } | undefined>(undefined);
+  const [info, setInfo] = useState<{ ver: string; name: string } | undefined>(
+    undefined
+  );
   useEffect(() => {
-    fetch("/api/rcon/info")
-      .then((res) => res.json)
+    fetch("/api/rcon/info", {
+      next: {
+        revalidate: 0,
+      },
+    })
+      .then((res) => res.json())
       .then((info) => {
         setInfo(info as any);
       });
