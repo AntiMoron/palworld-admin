@@ -10,6 +10,7 @@ export default function PalworldVersion(props: Props) {
   );
   useEffect(() => {
     fetch("/api/rcon/info", {
+      method: "PUT",
       next: {
         revalidate: 0,
       },

@@ -2,6 +2,12 @@
 # Name of the database file
 DB_FILE="palserver.db"
 
+rm -rf $DB_FILE
+
+if [ command -v sqlite3 >/dev/null 2>&1 ]; then
+  sudo apt-get install sqlite3
+fi
+
 # SQL statements to create the database and table
 SQL_COMMANDS=$(cat <<EOF
 CREATE TABLE game_character (

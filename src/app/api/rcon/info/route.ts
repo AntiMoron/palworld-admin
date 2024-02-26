@@ -1,6 +1,7 @@
 import sendRcon from "@/util/rcon";
 
-export async function GET() {
+// not GET, for not wanting nextjs to evalute this function in build time.
+export async function PUT() {
   try {
     const ret = await sendRcon("Info");
     return Response.json(ret);

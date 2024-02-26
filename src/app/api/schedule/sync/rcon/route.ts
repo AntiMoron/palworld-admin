@@ -1,6 +1,6 @@
 import sendRcon from "@/util/rcon";
 
-export async function GET() {
+export async function POST() {
   console.log("triggered RCON sync");
   try {
     const ret = await sendRcon("ShowPlayers");

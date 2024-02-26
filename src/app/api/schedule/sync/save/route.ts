@@ -3,13 +3,15 @@ import { saveGroup, saveGroupRelation } from "@/util/group";
 import { savePlayer } from "@/util/player";
 import runBash from "@/util/script";
 import dayjs from "dayjs";
-import path from "path";
+import getConfig from "next/config";
 
-export async function GET() {
+const { serverRuntimeConfig } = getConfig();
+
+export async function POST() {
   try {
     console.log("triggered SaveFile: Level.sav sync");
-    const fileDir = process.env.SAVE_FILE_DIR || "";
-    console.log("SAVE_FILE_DIR", process.env.SAVE_FILE_DIR);
+    const fileDir = serverRuntimeConfig.SAVE_FILE_DIR || "";
+    console.log("SAVE_FILE_DIR", serverRuntimeConfig.SAVE_FILE_DIR);
     if (!fileDir) {
       throw new Error("SAVE_FILE_DIR is not set");
     }
