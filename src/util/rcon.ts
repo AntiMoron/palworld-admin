@@ -1,9 +1,14 @@
 import Rcon from "rcon";
+import getConfig from "./getConfig";
 
-export default function sendRcon(cmd: string, params?: Record<string, string | number>) {
+export default function sendRcon(
+  cmd: string,
+  params?: Record<string, string | number>
+) {
   return new Promise((resolve, reject) => {
-    const location = process.env.RCON_LOCATION || "";
-    const pwd = process.env.RCON_ADMIN_PASSWORD || "";
+    const { RCON_LOCATION = "", RCON_ADMIN_PASSWORD = "" } = getConfig();
+    const location = RCON_LOCATION || "";
+    const pwd = RCON_ADMIN_PASSWORD || "";
     if (!pwd) {
       throw new Error("No RCON_ADMIN_PASSWORD provided");
     }
@@ -33,7 +38,7 @@ export default function sendRcon(cmd: string, params?: Record<string, string | n
           case "TeleportToPlayer":
           case "TeleportToMe":
             const { SteamID } = params || {};
-            conn.send(`${cmd} ${SteamID || ''}`);
+            conn.send(`${cmd} ${SteamID || ""}`);
             break;
           default:
             conn.send(cmd);

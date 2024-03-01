@@ -1,0 +1,3 @@
+[submodule "palworld-save-tools"]
+	path = palworld-save-tools
+	url = https://github.com/AntiMoron/palworld-save-tools.git

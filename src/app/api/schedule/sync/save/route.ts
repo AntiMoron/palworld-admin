@@ -1,22 +1,22 @@
 import fetchSavedFile from "@/util/fetchSavedFile";
+import getConfig from "@/util/getConfig";
 import { saveGroup, saveGroupRelation } from "@/util/group";
 import { savePlayer } from "@/util/player";
 import runBash from "@/util/script";
 import dayjs from "dayjs";
-import getConfig from "next/config";
 
-const { serverRuntimeConfig } = getConfig();
 
 export async function POST() {
   try {
     console.log("triggered SaveFile: Level.sav sync");
-    const fileDir = serverRuntimeConfig.SAVE_FILE_DIR || "";
-    console.log("SAVE_FILE_DIR", serverRuntimeConfig.SAVE_FILE_DIR);
+    const config = getConfig();
+    const fileDir = config.SAVE_FILE_DIR || "";
+    console.log("SAVE_FILE_DIR", config.SAVE_FILE_DIR);
     if (!fileDir) {
       throw new Error("SAVE_FILE_DIR is not set");
     }
     const files = await runBash(
-      `find -name 'Level.sav' ${fileDir} -exec readlink -f {} \\;`
+      `find ${fileDir} -name 'Level.sav' -exec readlink -f {} \\;`
     );
     const filename = files.split("\n")?.[0];
     console.log("start to read " + filename);

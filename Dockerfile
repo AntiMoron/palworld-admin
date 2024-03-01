@@ -1,13 +1,30 @@
+# Save file parser
+FROM python:3.9 as pybuild
+
+WORKDIR /root
+RUN python -m venv /root/py
+# For CN Region
+RUN /root/py/bin/pip config set global.index-url http://mirrors.aliyun.com/pypi/simple
+RUN /root/py/bin/pip config set install.trusted-host mirrors.aliyun.com
+RUN pip install pyinstaller
+COPY ./palworld-save-tools /root/
+COPY ./sync_save.py /root/
+RUN pyinstaller --onefile sync_save.py
+
+# Everything else
 FROM nikolaik/python-nodejs:python3.9-nodejs21
 
 WORKDIR /root
+
+RUN mkdir -p /etc/apt/
+COPY /etc/apt/sources.list /etc/apt/sources.list
+RUN apt-get -y update
+RUN apt-get install sqlite3 libsqlite3-dev -y
+
 # install python
 RUN python -m venv /root/py
 # For CN Region
-RUN pip3 config set global.index-url http://mirrors.aliyun.com/pypi/simple
-RUN pip3 config set install.trusted-host mirrors.aliyun.com
-
-RUN /root/py/bin/pip install palworld-save-tools
+COPY --from=pybuild /root/dist/sync_save /root/py/bin/sync_save
 RUN echo "export PATH=$PATH:/root/py/bin" >> /root/.bashrc
 
 # cache node_modules by package.json
@@ -22,6 +39,7 @@ RUN npm config set registry http://mirrors.cloud.tencent.com/npm/
 RUN npm install
 # sync codes
 COPY ./ /root/
+RUN bash ./scripts/init_db.sh
 
 ENV MAX_OLD_SPACE_SIZE=256
 ENV SAVE_FILE_DIR=/game
