@@ -12,6 +12,7 @@ export interface Player {
   level: number;
   is_player: number; // 0 | 1
   instance_id: string;
+  character_id: string;
   last_login_at: string;
   hp: number;
   mp: number;
@@ -72,6 +73,7 @@ export async function getAllPlayers(filter?: {
       equip_waza: "equip_waza",
       max_hp: "max_hp",
       max_mp: "max_mp",
+      character_id: "character_id",
       max_sp: "max_sp",
       passive_skill_list: "passive_skill_list",
       talent_hp: "talent_hp",

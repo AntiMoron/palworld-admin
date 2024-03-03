@@ -39,7 +39,7 @@ export default function Menu() {
         <div className={styles.lg}>
           <div className="flex h-[60px] items-center">
             <Link
-              className="flex items-center gap-2 text-xl font-semibold"
+              className="flex items-center gap-2 text-xl font-semibold px-6"
               href="/app/players"
             >
               Palworld Admin Panel

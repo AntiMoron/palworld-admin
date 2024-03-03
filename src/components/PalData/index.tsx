@@ -11,17 +11,17 @@ interface Props extends Player {
 }
 
 export default function PalData(props: Props) {
-  const { className, style, nick_name: nickname, gender, level, exp } = props;
+  const { className, style, nick_name: nickname, character_id, gender, level, exp } = props;
   const isFemail = gender === "Female";
   return (
     <div className={className} style={style}>
       <div className={styles.basic}>
-        <PalAvatar name={nickname} />
+        <PalAvatar name={nickname} character={character_id} />
+        <div className={styles.lv}>Lv. {level}</div>
         <div className={cx(styles.gender, { [styles.fem]: isFemail })}>
           {isFemail ? "♀" : "♂"}
         </div>
         <span className={styles.name}>{nickname.replace("BOSS_", "")}</span>
-        <div className={styles.lv}>Lv. {level}</div>
       </div>
       <div>
         <ExpBar exp={exp} />

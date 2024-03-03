@@ -115,7 +115,7 @@ export default function Component(props: any) {
                 dataIndex: "nick_name",
                 title: "Name",
                 fixed: true,
-                width: 220,
+                width: 150,
                 sorter: (a, b) => a.level - b.level,
                 render: (_, record) => <PalData {...record} />,
               },
