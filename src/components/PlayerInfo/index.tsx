@@ -3,6 +3,7 @@ import React from "react";
 import cx from "classnames";
 import { Typography, Button } from "antd";
 import styles from "./index.module.sass";
+import ExpBar from "../ExpBar";
 
 const { Paragraph } = Typography;
 
@@ -13,8 +14,15 @@ interface Props extends Player {
 }
 
 export default function PlayerInfo(props: Props) {
-  const { className, style, onViewGuild, nick_name, player_uid, steam_id } =
-    props;
+  const {
+    className,
+    style,
+    onViewGuild,
+    nick_name,
+    player_uid,
+    steam_id,
+    exp,
+  } = props;
   return (
     <>
       <div className={cx(styles.playerInfo, className)} style={style}>
@@ -23,6 +31,9 @@ export default function PlayerInfo(props: Props) {
           <div className={styles.lower}>
             {player_uid && <Paragraph copyable>{player_uid}</Paragraph>}
             {steam_id && <Paragraph copyable>{steam_id}</Paragraph>}
+          </div>
+          <div>
+            <ExpBar exp={exp} />
           </div>
         </div>
         <Button type="link" onClick={onViewGuild}>

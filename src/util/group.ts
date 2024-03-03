@@ -9,12 +9,17 @@ export interface Group {
   group_type: string;
   guild_name: string;
   base_camp_level?: number;
+  base_ids?: string[];
 }
 
 export async function getGroups() {
   const client = getClient();
-  const groups = await client("game_group");
-  return groups as Group[];
+  const groups = await client("game_group").select();
+  return (groups as Group[])?.map((item) => {
+    const baseIds = (item.base_ids as any as string)?.split(",");
+    item.base_ids = baseIds;
+    return item;
+  });
 }
 
 export async function getGroupByGroupId(groupId: string) {
@@ -30,6 +35,7 @@ export async function saveGroup(group: Omit<Group, "id">) {
   const { group_id } = group;
   const client = getClient();
   const old = await getGroupByGroupId(group_id);
+  (group as any).base_ids = group.base_ids?.join(",");
   if (old) {
     await client("game_group")
       .where("id", old.id)
@@ -37,9 +43,11 @@ export async function saveGroup(group: Omit<Group, "id">) {
         omit(group, ["group_id", "individual_character_handle_ids", "players"])
       );
   } else {
-    await client("game_group").insert(
+    const sql = client("game_group").insert(
       omit(group, ["individual_character_handle_ids", "players"])
     );
+    console.log(sql.toQuery());
+    await sql;
   }
 }
 

@@ -1,4 +1,6 @@
+import { checkAuth } from "@/util/auth";
 import { getAllPlayers } from "@/util/player";
+import { RedirectType, redirect } from "next/navigation";
 import { NextRequest } from "next/server";
 
 /**
@@ -6,6 +8,12 @@ import { NextRequest } from "next/server";
  */
 export async function GET(res: NextRequest) {
   try {
+    const token = res.cookies?.get("__pa_token")?.value;
+    try {
+      await checkAuth(token as string);
+    } catch {
+      return Response.json({ error: "Not Logined" }, { status: 401 });
+    }
     const params = res.nextUrl.searchParams;
     const groupId = params.get("groupId") || "";
     const order = (params.get("order") || "desc") as "desc" | "asc";

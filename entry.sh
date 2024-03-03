@@ -4,8 +4,11 @@ echo "MAX_OLD_SPACE_SIZE=$MAX_OLD_SPACE_SIZE" >> $config_file
 echo "SAVE_FILE_DIR=$SAVE_FILE_DIR" >> $config_file
 echo "RCON_LOCATION=$RCON_LOCATION" >> $config_file
 echo "RCON_ADMIN_PASSWORD=$RCON_ADMIN_PASSWORD" >> $config_file
+echo "ADMIN_PANEL_PASSWORD=$ADMIN_PANEL_PASSWORD" >> $config_file
 
 copy_only=$1
+
+bash ./scripts/init_db.sh
 
 if [ $copy_only = "copy-only" ]
 then

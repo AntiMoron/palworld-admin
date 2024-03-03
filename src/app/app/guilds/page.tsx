@@ -12,24 +12,27 @@ const { Title, Paragraph } = Typography;
 
 export default function Component(props: any) {
   const { guildId } = props;
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [groups, setGroups] = useState<undefined | Group[]>(undefined);
   const [players, setPlayers] = useState<Player[] | undefined>();
   const [curGroup, setCurGroup] = useState<undefined | Group>();
   useEffect(() => {
     fetch("/api/group", {
+      method: "GET",
       next: {
         revalidate: 0,
       },
     })
       .then((res) => res.json())
+      .catch((res) => res.status === 401 && router.replace("/"))
       .then((data) => {
         data.sort((a: Group, b: Group) => {
           if (a.guild_name === "Unnamed Guild") return 1;
           if (b.guild_name === "Unnamed Guild") return -1;
-          return a.guild_name.localeCompare(b.guild_name);
+          return a?.guild_name?.localeCompare?.(b.guild_name);
         });
-        setGroups(data); 
+        setGroups(data);
         if (guildId) {
           const corres = data.find(
             (datum: Group) => datum.group_id === guildId
@@ -44,6 +47,7 @@ export default function Component(props: any) {
     if (!curGroup) {
       return;
     }
+    setLoading(true);
     fetch(`/api/players?isPlayer=true&groupId=${curGroup?.group_id}`, {
       next: {
         revalidate: 0,
@@ -52,6 +56,10 @@ export default function Component(props: any) {
       .then((r) => r.json())
       .then((data) => {
         setPlayers(data);
+      })
+      .catch((res) => res.status === 401 && router.replace("/"))
+      .finally(() => {
+        setLoading(false);
       });
   }, [curGroup]);
 
@@ -90,7 +98,7 @@ export default function Component(props: any) {
           )}
           <Table
             dataSource={players}
-            loading={players === undefined}
+            loading={loading}
             pagination={{
               pageSize: 50,
               showPrevNextJumpers: true,
@@ -102,7 +110,7 @@ export default function Component(props: any) {
             onRow={(record) => {
               return {
                 onClick: () => {
-                  router.push(`/players/${record.player_uid}`);
+                  router.push(`/app/players/${record.player_uid}`);
                 },
               };
             }}

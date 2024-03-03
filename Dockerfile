@@ -39,7 +39,6 @@ RUN npm config set registry http://mirrors.cloud.tencent.com/npm/
 RUN npm install
 # sync codes
 COPY ./ /root/
-RUN bash ./scripts/init_db.sh
 
 ENV MAX_OLD_SPACE_SIZE=256
 ENV SAVE_FILE_DIR=/game

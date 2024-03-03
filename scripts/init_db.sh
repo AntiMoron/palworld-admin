@@ -4,8 +4,17 @@ DB_FILE="palserver.db"
 
 rm -rf $DB_FILE
 
+hashed_pwd=`echo -n $ADMIN_PANEL_PASSWORD | sha256sum  | cut -d ' ' -f 1`
+
 # SQL statements to create the database and table
 SQL_COMMANDS=$(cat <<EOF
+CREATE TABLE user (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  username TEXT NOT NULL UNIQUE,
+  password TEXT NOT NULL,
+  cur_jwt TEXT
+);
+
 CREATE TABLE game_character (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   instance_id TEXT NOT NULL,
@@ -44,7 +53,7 @@ CREATE TABLE game_character (
 CREATE TABLE game_group (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   group_id TEXT NOT NULL UNIQUE,
-  group_name TEXT NOT NULL UNIQUE,
+  group_name TEXT NOT NULL,
   guild_name TEXT,
   group_type TEXT NOT NULL,
   base_camp_level INTEGER,
@@ -60,6 +69,8 @@ CREATE TABLE char_group_rel (
   FOREIGN KEY (instance_id) REFERENCES game_character(instance_id),
   FOREIGN KEY (group_id) REFERENCES game_group(group_id)
 );
+
+insert into \`user\` (\`username\`, \`password\`, \`cur_jwt\`) values ('admin', '$hashed_pwd', Null);
 EOF
 )
 

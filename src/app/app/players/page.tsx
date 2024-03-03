@@ -37,7 +37,8 @@ export default function Component(props: any) {
         } else {
           setCurPlayer(data?.[0]);
         }
-      });
+      })
+      .catch((res) => res.status === 401 && router.replace("/"));
   }, []);
   useEffect(() => {
     if (!curPlayer) {
@@ -56,10 +57,11 @@ export default function Component(props: any) {
       .then((pals) => {
         setPals(pals);
       })
+      .catch((res) => res.status === 401 && router.replace("/"))
       .finally(() => {
         setLoading(false);
       });
-  }, [curPlayer, page]);
+  }, [curPlayer]);
   if (Array.isArray(players) && players.length === 0) {
     return (
       <Result

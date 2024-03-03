@@ -12,5 +12,6 @@ services:
       - RCON_LOCATION=127.0.0.1:27055
       - RCON_ADMIN_PASSWORD=your_password
       - SAVE_SYNC_CRONTAB="*/5 * * * *"
+      - ADMIN_PANEL_PASSWORD=1234
     volumes:
       - /palworld/Pal/Saved/:/game

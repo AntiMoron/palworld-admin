@@ -4,15 +4,9 @@ import LampContainer from "@/components/LampContainer";
 import { motion } from "framer-motion";
 import styles from "./index.module.sass";
 import { SparklesCore } from "@/components/SparkText";
-import { useRouter } from "next/navigation";
+import Login from "@/components/Login";
 
 export default function App() {
-  const router = useRouter();
-  useEffect(() => {
-    setTimeout(() => {
-      router.replace("/app/players");
-    }, 1000);
-  });
   return (
     <div className={styles.main}>
       <LampContainer>
@@ -29,10 +23,13 @@ export default function App() {
           Palworld Admin Panel
         </motion.h1>
       </LampContainer>
+      <div className={styles.loginBox}>
+        <Login />
+      </div>
 
       <div
         className="w-full absolute inset-0 h-screen"
-        style={{ opacity: 0.5 }}
+        style={{ opacity: 0.5, pointerEvents: "none" }}
       >
         <SparklesCore
           id="tsparticlesfullpage"

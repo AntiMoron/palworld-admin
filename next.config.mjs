@@ -8,6 +8,8 @@ const nextConfig = {
       "sqlite3",
       "jsonstream",
       "knex",
+      "sha256",
+      "jwt",
     ],
   },
 };
