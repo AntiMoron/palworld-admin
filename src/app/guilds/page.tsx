@@ -24,7 +24,12 @@ export default function Component(props: any) {
     })
       .then((res) => res.json())
       .then((data) => {
-        setGroups(data);
+        data.sort((a: Group, b: Group) => {
+          if (a.guild_name === "Unnamed Guild") return 1;
+          if (b.guild_name === "Unnamed Guild") return -1;
+          return a.guild_name.localeCompare(b.guild_name);
+        });
+        setGroups(data); 
         if (guildId) {
           const corres = data.find(
             (datum: Group) => datum.group_id === guildId
@@ -61,6 +66,7 @@ export default function Component(props: any) {
               group_type: groupType,
               group_name: groupName,
               guild_name: guildName,
+              base_camp_level,
             } = group;
             return (
               <Guild
@@ -70,6 +76,7 @@ export default function Component(props: any) {
                 }}
                 groupName={guildName}
                 groupType={groupType}
+                groupLevel={base_camp_level}
               />
             );
           })}
@@ -101,11 +108,11 @@ export default function Component(props: any) {
             }}
             columns={[
               {
-                title: "nickname",
+                title: "Guild Name",
                 dataIndex: "nick_name",
               },
               {
-                title: "level",
+                title: "Level",
                 dataIndex: "level",
                 render: (data) => <Tag color="gold">{data}</Tag>,
               },

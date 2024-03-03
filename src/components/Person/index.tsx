@@ -29,10 +29,10 @@ export default function Person(props: Props) {
       onClick={onClick}
     >
       <div className={styles.heading}>
+        <div className={styles.lv} color="gold">
+          lv. {level || "0"}
+        </div>
         <div className={styles.nick}>{nick_name}</div>
-        <Tag className={styles.tag} color="gold">
-          Level: {level || "0"}
-        </Tag>
         {online && (
           <Tag className={styles.tag} color="green">
             {online}

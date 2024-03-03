@@ -6,6 +6,7 @@ export interface Player {
   id: number;
   steam_id: string;
   player_uid: string;
+  gender: string;
   exp: number;
   craft_speed?: number;
   level: number;
@@ -57,6 +58,7 @@ export async function getAllPlayers(filter?: {
       steam_id: "game_character.steam_id",
       player_uid: "game_character.player_uid",
       exp: "exp",
+      gender: "gender",
       level: "level",
       instance_id: "game_character.instance_id",
       group_id: "game_group.group_id",
@@ -126,7 +128,7 @@ export function handleRawSavedPlayer(player: any): Player {
     "MaxHP",
     "ShieldMaxHP",
     "CharacterID",
-    "gender",
+    "Gender",
     "EquipWaza",
     "MasteredWaza",
     "Talent_HP",

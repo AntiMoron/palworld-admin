@@ -21,8 +21,8 @@ export default function PlayerInfo(props: Props) {
         <div className={styles.left}>
           <div>{nick_name}</div>
           <div className={styles.lower}>
-            <Paragraph copyable>{player_uid}</Paragraph>
-            <Paragraph copyable>{steam_id}</Paragraph>
+            {player_uid && <Paragraph copyable>{player_uid}</Paragraph>}
+            {steam_id && <Paragraph copyable>{steam_id}</Paragraph>}
           </div>
         </div>
         <Button type="link" onClick={onViewGuild}>

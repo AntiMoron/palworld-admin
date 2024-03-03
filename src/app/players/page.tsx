@@ -4,17 +4,20 @@ import React, { useEffect, useState } from "react";
 import styles from "./index.module.sass";
 import Person from "@/components/Person";
 import { Player } from "@/util/player";
-import { Button, Spin, Table, Tag, Typography } from "antd";
+import { Button, Result, Spin, Table, Tag, Typography } from "antd";
 import PalAvatar from "@/components/PalAvatar";
 import PalFeature from "@/components/PalFeature";
 import PlayerInfo from "@/components/PlayerInfo";
 import { useRouter } from "next/navigation";
 import formatNumber from "@/util/formatNumber";
+import PalData from "@/components/PalData";
 
 const { Title, Paragraph } = Typography;
 
 export default function Component(props: any) {
   const { playerUid } = props;
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
   const [players, setPlayers] = useState<undefined | Player[]>(undefined);
   const [pals, setPals] = useState<undefined | Player[]>(undefined);
   const [curPlayer, setCurPlayer] = useState<undefined | Player>();
@@ -40,6 +43,7 @@ export default function Component(props: any) {
     if (!curPlayer) {
       return;
     }
+    setLoading(true);
     fetch(
       `/api/players?ownerId=${curPlayer?.player_uid || ""}&isPlayer=false`,
       {
@@ -51,8 +55,16 @@ export default function Component(props: any) {
       .then((res) => res.json())
       .then((pals) => {
         setPals(pals);
+      })
+      .finally(() => {
+        setLoading(false);
       });
-  }, [curPlayer]);
+  }, [curPlayer, page]);
+  if (Array.isArray(players) && players.length === 0) {
+    return (
+      <Result title="No Players' Data Found" subTitle="Please wait next sync." />
+    );
+  }
   return (
     <Spin spinning={!players} style={{ background: "transparent" }}>
       <Title level={2}>Players</Title>
@@ -64,6 +76,7 @@ export default function Component(props: any) {
               <Person
                 selected={datum === curPlayer}
                 onClick={() => {
+                  setPage(1);
                   setCurPlayer(datum);
                 }}
                 {...datum}
@@ -83,82 +96,93 @@ export default function Component(props: any) {
           )}
           <Table
             dataSource={pals}
-            loading={pals === undefined}
-            scroll={{ x: 1300 }}
+            loading={loading}
+            scroll={{ x: 1400 }}
             columns={[
               {
                 dataIndex: "nick_name",
-                sorter: (a, b) => a.nick_name.localeCompare(b.nick_name),
                 title: "Name",
                 width: 220,
-                render: (data) => (
-                  <div>
-                    <PalAvatar name={data} />
-                    <span style={{ marginLeft: 8 }}>
-                      {data.replace("BOSS_", "")}
-                    </span>
-                  </div>
-                ),
-              },
-              {
-                dataIndex: "level",
-                title: "Level",
-                render: (data) => <Tag color="gold">{data || 0}</Tag>,
                 sorter: (a, b) => a.level - b.level,
+                render: (_, record) => <PalData {...record} />,
               },
               {
                 dataIndex: "craft_speed",
                 title: "Craft Speed",
+                width: 100,
                 render: (data) => formatNumber(data || 0) || "- -",
                 sorter: (a, b) => (a.craft_speed || 0) - (b.craft_speed || 0),
               },
               {
                 dataIndex: "max_hp",
                 title: "Max HP",
+                width: 100,
                 render: (data) => formatNumber((data || 0) / 1000.0) || "- -",
                 sorter: (a, b) => a.max_hp - b.max_hp,
               },
               {
                 dataIndex: "talent_hp",
                 title: "Talendt HP",
+                width: 100,
                 render: (data) => formatNumber(data || 0) || "- -",
                 sorter: (a, b) => a.talent_hp - b.talent_hp,
               },
               {
                 dataIndex: "talent_melee",
                 title: "Talent Melee",
+                width: 100,
                 render: (data) => formatNumber(data || 0) || "- -",
                 sorter: (a, b) => a.talent_melee - b.talent_melee,
               },
               {
                 dataIndex: "talent_shot",
                 title: "Talent Shot",
+                width: 100,
                 render: (data) => formatNumber(data || 0) || "- -",
                 sorter: (a, b) => a.talent_shot - b.talent_shot,
               },
               {
                 dataIndex: "talent_defense",
                 title: "Talent Defense",
+                width: 100,
                 render: (data) => formatNumber(data || 0) || "- -",
                 sorter: (a, b) => a.talent_defense - b.talent_defense,
               },
               {
+                dataIndex: "craft_speed",
+                title: "Craft Speed",
+                width: 100,
+                render: (data) => formatNumber(data || 0) || "- -",
+                sorter: (a, b) => (a.craft_speed || 0) - (b.craft_speed || 0),
+              },
+              {
                 dataIndex: "passive_skill_list",
                 title: "Labels",
+                width: 300,
                 render: (data) => {
                   if (!data) {
                     return "- -";
                   }
-                  return data?.split(",").map((tag: string) => {
-                    if (!tag) {
-                      return "- -";
-                    }
-                    return <PalFeature feature={tag} />;
-                  });
+                  return (
+                    <div>
+                      {data?.split(",").map((tag: string) => {
+                        if (!tag) {
+                          return "- -";
+                        }
+                        return <PalFeature feature={tag} />;
+                      })}
+                    </div>
+                  );
                 },
                 sorter: (a, b) => a.max_mp - b.max_mp,
               },
             ]}
+            pagination={{
+              current: page,
+              onChange: (page, pageSize) => {
+                setPage(page);
+              },
+            }}
           />
         </div>
       </div>

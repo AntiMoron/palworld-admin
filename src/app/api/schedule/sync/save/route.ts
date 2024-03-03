@@ -52,7 +52,7 @@ export async function POST() {
         )
       );
       try {
-        console.log(player);
+        // console.log(player);
         await savePlayer(
           handleRawSavedPlayer({
             ...player,
@@ -70,7 +70,7 @@ export async function POST() {
 
     for (const pal of pals) {
       try {
-        console.log(pal);
+        // console.log(pal);
         await savePlayer(
           handleRawSavedPlayer({
             ...pal,
@@ -84,7 +84,7 @@ export async function POST() {
     // sync guilds
     for (const group of guilds) {
       try {
-        console.log(group);
+        // console.log(group);
         const { individual_character_handle_ids: relations = [], group_id } =
           group;
         await saveGroup(group);
