@@ -25,7 +25,7 @@ export default function Component(props: any) {
       },
     })
       .then((res) => res.json())
-      .catch((res) => res.status === 401 && router.replace("/"))
+      .catch(() => router.replace("/"))
       .then((data) => {
         data.sort((a: Group, b: Group) => {
           if (a.guild_name === "Unnamed Guild") return 1;
@@ -57,7 +57,7 @@ export default function Component(props: any) {
       .then((data) => {
         setPlayers(data);
       })
-      .catch((res) => res.status === 401 && router.replace("/"))
+      .catch(() => router.replace("/"))
       .finally(() => {
         setLoading(false);
       });

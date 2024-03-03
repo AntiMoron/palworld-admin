@@ -38,7 +38,7 @@ export default function Component(props: any) {
           setCurPlayer(data?.[0]);
         }
       })
-      .catch((res) => res.status === 401 && router.replace("/"));
+      .catch(() => router.replace("/"));
   }, []);
   useEffect(() => {
     if (!curPlayer) {
@@ -57,7 +57,7 @@ export default function Component(props: any) {
       .then((pals) => {
         setPals(pals);
       })
-      .catch((res) => res.status === 401 && router.replace("/"))
+      .catch(() => router.replace("/"))
       .finally(() => {
         setLoading(false);
       });
