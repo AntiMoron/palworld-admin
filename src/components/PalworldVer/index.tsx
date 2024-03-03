@@ -1,10 +1,15 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import cx from "classnames";
 import styles from "./index.module.sass";
 
-interface Props {}
+interface Props {
+  className?: string;
+  style?: React.CSSProperties;
+}
 
 export default function PalworldVersion(props: Props) {
+  const { className, style } = props;
   const [info, setInfo] = useState<{ ver: string; name: string } | undefined>(
     undefined
   );
@@ -21,10 +26,8 @@ export default function PalworldVersion(props: Props) {
       });
   }, []);
   return (
-    <div className={`flex-1 ${styles.header}`}>
-      <span className={styles.serverInfo}>
-        {info?.ver || ""} {info?.name || ""}
-      </span>
+    <div className={cx(`flex-1 ${styles.header}`, className)} style={style}>
+      {info?.ver || ""} {info?.name || ""}
     </div>
   );
 }

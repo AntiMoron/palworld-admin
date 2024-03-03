@@ -5,9 +5,9 @@ import styles from "./index.module.sass";
 import Person from "@/components/Person";
 import { Player } from "@/util/player";
 import { Button, Result, Spin, Table, Tag, Typography } from "antd";
-import PalAvatar from "@/components/PalAvatar";
 import PalFeature from "@/components/PalFeature";
 import PlayerInfo from "@/components/PlayerInfo";
+import cx from "classnames";
 import { useRouter } from "next/navigation";
 import formatNumber from "@/util/formatNumber";
 import PalData from "@/components/PalData";
@@ -62,13 +62,20 @@ export default function Component(props: any) {
   }, [curPlayer, page]);
   if (Array.isArray(players) && players.length === 0) {
     return (
-      <Result title="No Players' Data Found" subTitle="Please wait next sync." />
+      <Result
+        title="No Players' Data Found"
+        subTitle="Please wait next sync."
+      />
     );
   }
   return (
     <Spin spinning={!players} style={{ background: "transparent" }}>
-      <Title level={2}>Players</Title>
-      <div className={styles.container}>
+      <Title level={2}>{"Players"}</Title>
+      <div
+        className={cx(styles.container, {
+          [styles.playerDetail]: Boolean(playerUid),
+        })}
+      >
         <div className={styles.leftPlayers}>
           {players?.map((datum) => {
             const { last_login_at: lastLoginAt } = datum;
@@ -76,6 +83,11 @@ export default function Component(props: any) {
               <Person
                 selected={datum === curPlayer}
                 onClick={() => {
+                  const isMobile = window.innerWidth < 640;
+                  if (isMobile) {
+                    router.push(`/app/players/${datum?.player_uid}`);
+                    return;
+                  }
                   setPage(1);
                   setCurPlayer(datum);
                 }}
@@ -102,6 +114,7 @@ export default function Component(props: any) {
               {
                 dataIndex: "nick_name",
                 title: "Name",
+                fixed: true,
                 width: 220,
                 sorter: (a, b) => a.level - b.level,
                 render: (_, record) => <PalData {...record} />,

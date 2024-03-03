@@ -171,9 +171,6 @@ export function handleRawSavedPlayer(player: any): Player {
   delete handled.isplayer;
   if (handled.character_id) {
     handled.nick_name = handled.nick_name || handled.character_id;
-    delete handled.character_id;
-  } else {
-    delete handled.character_id;
   }
   console.log(handled);
   return handled;

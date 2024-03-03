@@ -33,6 +33,7 @@ CREATE TABLE game_character (
   owned_time TEXT,
   last_login_at DATETIME NOT NULL,
   nick_name TEXT NOT NULL,
+  character_id TEXT,
   status TEXT,
   craft_speed INTEGER,
   craft_speeds TEXT,
