@@ -10,5 +10,5 @@ echo $filedir
 # parse save file
 rm -rf $output_file
 
-echo "./sync_save $filedir --output $output_file"
-./sync_save $filedir --output $output_file
+echo "/root/py/bin/sync_save $filedir --output $output_file"
+/root/py/bin/sync_save $filedir --output $output_file

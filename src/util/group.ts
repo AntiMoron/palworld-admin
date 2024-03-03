@@ -8,6 +8,7 @@ export interface Group {
   group_name: string;
   group_type: string;
   guild_name: string;
+  base_camp_level?: number;
 }
 
 export async function getGroups() {
