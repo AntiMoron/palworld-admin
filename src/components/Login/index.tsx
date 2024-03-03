@@ -3,12 +3,15 @@ import { Button, Form, Input, message } from "antd";
 import { useRouter } from "next/navigation";
 import React from "react";
 import sha256 from "sha256";
+import styles from "./index.module.sass";
 
 export default function Login() {
   const router = useRouter();
   return (
-    <div>
+    <div className={styles.border}>
+      <h1 className={styles.h1}>Palworld Admin Panel</h1>
       <Form
+        className={styles.form}
         onFinish={(values: any) => {
           const { password } = values;
           fetch("/api/auth", {
@@ -34,15 +37,13 @@ export default function Login() {
         <Form.Item
           rules={[{ required: true }]}
           name="password"
-          label="Admin Panel Password"
+          label={<span style={{ color: "#fff" }}>Admin Panel Password</span>}
         >
           <Input placeholder="admin panel password" />
         </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
+        <Button type="primary" htmlType="submit">
+          Submit
+        </Button>
       </Form>
     </div>
   );

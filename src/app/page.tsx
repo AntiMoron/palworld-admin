@@ -20,13 +20,9 @@ export default function App() {
           }}
           className="mt-8 bg-gradient-to-br from-slate-300 to-slate-500 py-4 bg-clip-text text-center text-4xl font-medium tracking-tight text-transparent md:text-7xl"
         >
-          Palworld Admin Panel
+          <Login />
         </motion.h1>
       </LampContainer>
-      <div className={styles.loginBox}>
-        <Login />
-      </div>
-
       <div
         className="w-full absolute inset-0 h-screen"
         style={{ opacity: 0.5, pointerEvents: "none" }}
