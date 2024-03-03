@@ -60,6 +60,7 @@ export default function Component(props: any) {
               group_id: groupId,
               group_type: groupType,
               group_name: groupName,
+              guild_name: guildName,
             } = group;
             return (
               <Guild
@@ -67,7 +68,7 @@ export default function Component(props: any) {
                 onClick={() => {
                   setCurGroup(group);
                 }}
-                groupName={groupName}
+                groupName={guildName}
                 groupType={groupType}
               />
             );
@@ -101,7 +102,7 @@ export default function Component(props: any) {
             columns={[
               {
                 title: "nickname",
-                dataIndex: "nickname",
+                dataIndex: "nick_name",
               },
               {
                 title: "level",

@@ -1,10 +1,11 @@
+import convTime from "@/util/convTime";
 import fetchSavedFile from "@/util/fetchSavedFile";
 import getConfig from "@/util/getConfig";
+import getFileUtcTimeStamp from "@/util/getFileUtcTimeStamp";
 import { saveGroup, saveGroupRelation } from "@/util/group";
-import { savePlayer } from "@/util/player";
+import { handleRawSavedPlayer, savePlayer } from "@/util/player";
 import runBash from "@/util/script";
 import dayjs from "dayjs";
-
 
 export async function POST() {
   try {
@@ -19,36 +20,49 @@ export async function POST() {
       `find ${fileDir} -name 'Level.sav' -exec readlink -f {} \\;`
     );
     const filename = files.split("\n")?.[0];
+    const fileUtc = getFileUtcTimeStamp(filename);
     console.log("start to read " + filename);
     const data = await fetchSavedFile(filename);
     console.log("finish to read");
-    const { pals, playerInstanceIdMap, players, guilds } = data;
+    const {
+      pals,
+      playerInstanceIdMap,
+      realTimeTick,
+      players,
+      guilds = [],
+    } = data;
+    const playerLoginTimes = guilds
+      .map((item) => ({
+        player_uid: item.player_uid,
+        last_online_real_time: item.player_info?.last_online_real_time || 0,
+      }))
+      .reduce((acc, cur) => {
+        acc[cur.player_uid || ""] = cur.last_online_real_time;
+        return acc;
+      }, {} as any);
+    console.log("playerLoginTimes", JSON.stringify(playerLoginTimes));
     // sync players
     for (const player of players) {
-      console.log(player);
+      console.log(
+        player,
+        convTime(
+          playerLoginTimes[player.playerUid]?.last_online_real_time || 0,
+          realTimeTick,
+          fileUtc
+        )
+      );
       try {
-        await savePlayer({
-          instance_id: player.instanceId,
-          player_id: player.playerUid,
-          player_uid: player.playerUid,
-          steam_id: player.instanceId,
-          nickname: player.NickName,
-          level: player.Level,
-          exp: player.Exp,
-          hp: player.HP,
-          is_player: 1,
-          max_hp: player.MaxHP,
-          mp: player.MP,
-          max_mp: player.MaxSP,
-          status: "normal",
-          talent_hp: player.Talent_HP,
-          talent_melee: player.Talent_Melee,
-          talent_shot: player.Talent_Shot,
-          talent_defense: player.Talent_Defense,
-          passive_skill_list: player.PassiveSkillList.join(","),
-          craft_speed: player.CraftSpeed,
-          last_login_at: dayjs().format("YYYY-MM-DD HH:mm:ss"),
-        });
+        console.log(player);
+        await savePlayer(
+          handleRawSavedPlayer({
+            ...player,
+            last_login_at: convTime(
+              playerLoginTimes[player.playerUid]?.last_online_real_time || 0,
+              realTimeTick,
+              fileUtc
+            ),
+          })
+        );
       } catch (err) {
         console.log("saveplayer error: ", err);
       }
@@ -56,33 +70,13 @@ export async function POST() {
 
     for (const pal of pals) {
       try {
-        await savePlayer({
-          instance_id: pal.instanceId,
-          player_id: pal.playerUid,
-          is_player: 0,
-          player_uid: pal.playerUid,
-          steam_id: pal.instanceId,
-          nickname: pal.CharacterID,
-          level: pal.Level,
-          exp: pal.Exp,
-          hp: pal.HP,
-          max_hp: pal.MaxHP,
-          mp: pal.MP,
-          max_mp: pal.MaxSP,
-          status: "normal",
-          craft_speed: pal.CraftSpeed,
-          talent_hp: pal.Talent_HP,
-          talent_melee: pal.Talent_Melee,
-          talent_shot: pal.Talent_Shot,
-          craft_speeds: pal.CraftSpeeds.map((item) => {
-            const { rank, workSuitability } = item;
-            return `${workSuitability}|${rank}`;
-          }).join(","),
-          talent_defense: pal.Talent_Defense,
-          passive_skill_list: pal.PassiveSkillList.join(","),
-          last_login_at: "2024-02-24 13:02:02",
-          owner_player_uid: pal.OwnerPlayerUId,
-        });
+        console.log(pal);
+        await savePlayer(
+          handleRawSavedPlayer({
+            ...pal,
+            last_login_at: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+          })
+        );
       } catch (err) {
         console.log("savepals error: ", err);
       }
@@ -90,6 +84,7 @@ export async function POST() {
     // sync guilds
     for (const group of guilds) {
       try {
+        console.log(group);
         const { individual_character_handle_ids: relations = [], group_id } =
           group;
         await saveGroup(group);

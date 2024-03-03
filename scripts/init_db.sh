@@ -8,15 +8,19 @@ rm -rf $DB_FILE
 SQL_COMMANDS=$(cat <<EOF
 CREATE TABLE game_character (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  steam_id TEXT NOT NULL,
-  player_id TEXT NOT NULL,
-  player_uid TEXT NOT NULL,
   instance_id TEXT NOT NULL,
+  player_uid TEXT,
   exp INTEGER,
+  physical_health INTEGER,
   level INTEGER,
   hp INTEGER,
+  full_stomach INTEGER,
+  steam_id TEXT,
+  gender TEXT,
   mp INTEGER,
+  shield_max_hP INTEGER,
   max_hp INTEGER,
+  max_sp INTEGER,
   max_mp INTEGER,
   talent_hp INTEGER,
   talent_melee INTEGER,
@@ -26,18 +30,25 @@ CREATE TABLE game_character (
   owner_time DateTime,
   owner_player_uid TEXT,
   is_player INTEGER NOT NULL,
+  owned_time TEXT,
   last_login_at DATETIME NOT NULL,
-  nickname TEXT NOT NULL,
-  status TEXT NOT NULL,
+  nick_name TEXT NOT NULL,
+  status TEXT,
   craft_speed INTEGER,
-  craft_speeds TEXT
+  craft_speeds TEXT,
+  equip_waza TEXT,
+  mastered_waza TEXT
 );
 
 CREATE TABLE game_group (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   group_id TEXT NOT NULL UNIQUE,
   group_name TEXT NOT NULL UNIQUE,
-  group_type TEXT NOT NULL
+  guild_name TEXT,
+  group_type TEXT NOT NULL,
+  base_camp_level INTEGER,
+  base_ids TEXT,
+  admin_player_uid TEXT NOT NULL
 );
 
 CREATE TABLE char_group_rel (

@@ -6,3 +6,8 @@ yarn.lock
 package-lock.json
 palserver.db
 sync.cron
+sync_save.spec
+build/sync_save
+dist
+pa_config
+sync_save

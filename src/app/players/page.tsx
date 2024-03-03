@@ -9,6 +9,7 @@ import PalAvatar from "@/components/PalAvatar";
 import PalFeature from "@/components/PalFeature";
 import PlayerInfo from "@/components/PlayerInfo";
 import { useRouter } from "next/navigation";
+import formatNumber from "@/util/formatNumber";
 
 const { Title, Paragraph } = Typography;
 
@@ -54,18 +55,11 @@ export default function Component(props: any) {
   }, [curPlayer]);
   return (
     <Spin spinning={!players} style={{ background: "transparent" }}>
-      <Title level={2}> Players</Title>
+      <Title level={2}>Players</Title>
       <div className={styles.container}>
         <div className={styles.leftPlayers}>
           {players?.map((datum) => {
-            const {
-              player_id,
-              steam_id,
-              id,
-              nickname,
-              last_login_at: lastLoginAt,
-              status,
-            } = datum;
+            const { last_login_at: lastLoginAt } = datum;
             return (
               <Person
                 selected={datum === curPlayer}
@@ -90,10 +84,11 @@ export default function Component(props: any) {
           <Table
             dataSource={pals}
             loading={pals === undefined}
+            scroll={{ x: 1300 }}
             columns={[
               {
-                dataIndex: "nickname",
-                sorter: (a, b) => a.nickname.localeCompare(b.nickname),
+                dataIndex: "nick_name",
+                sorter: (a, b) => a.nick_name.localeCompare(b.nick_name),
                 title: "Name",
                 width: 220,
                 render: (data) => (
@@ -114,37 +109,37 @@ export default function Component(props: any) {
               {
                 dataIndex: "craft_speed",
                 title: "Craft Speed",
-                render: (data) => data || 0,
+                render: (data) => formatNumber(data || 0) || "- -",
                 sorter: (a, b) => (a.craft_speed || 0) - (b.craft_speed || 0),
               },
               {
                 dataIndex: "max_hp",
                 title: "Max HP",
-                render: (data) => data || 0,
+                render: (data) => formatNumber((data || 0) / 1000.0) || "- -",
                 sorter: (a, b) => a.max_hp - b.max_hp,
               },
               {
                 dataIndex: "talent_hp",
                 title: "Talendt HP",
-                render: (data) => data || 0,
+                render: (data) => formatNumber(data || 0) || "- -",
                 sorter: (a, b) => a.talent_hp - b.talent_hp,
               },
               {
                 dataIndex: "talent_melee",
                 title: "Talent Melee",
-                render: (data) => data || 0,
+                render: (data) => formatNumber(data || 0) || "- -",
                 sorter: (a, b) => a.talent_melee - b.talent_melee,
               },
               {
                 dataIndex: "talent_shot",
                 title: "Talent Shot",
-                render: (data) => data || 0,
+                render: (data) => formatNumber(data || 0) || "- -",
                 sorter: (a, b) => a.talent_shot - b.talent_shot,
               },
               {
                 dataIndex: "talent_defense",
                 title: "Talent Defense",
-                render: (data) => data || 0,
+                render: (data) => formatNumber(data || 0) || "- -",
                 sorter: (a, b) => a.talent_defense - b.talent_defense,
               },
               {

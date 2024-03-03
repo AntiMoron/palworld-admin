@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "bash entry.sh copy-only && next dev",
     "build": "next build",
     "start": "next start --port 3000",
     "lint": "next lint",
-    "test": "node ./src/util/fetchSavedFile"
+    "build:save_sync": "pyinstaller --onefile sync_save.py && mv dist/sync_save ./"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.0.4",

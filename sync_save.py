@@ -36,7 +36,8 @@ def main():
         worldSaveData = properties.get('worldSaveData').get('value')
         ret = {
             "CharacterSaveParameterMap": worldSaveData.get('CharacterSaveParameterMap'),
-            "GroupSaveDataMap": worldSaveData.get('GroupSaveDataMap')
+            "GroupSaveDataMap": worldSaveData.get('GroupSaveDataMap'),
+            "GameTimeSaveData": worldSaveData.get('GameTimeSaveData')
         }
         json.dump(
             ret, f, indent=None, cls=CustomEncoder, allow_nan=False

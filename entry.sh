@@ -5,6 +5,14 @@ echo "SAVE_FILE_DIR=$SAVE_FILE_DIR" >> $config_file
 echo "RCON_LOCATION=$RCON_LOCATION" >> $config_file
 echo "RCON_ADMIN_PASSWORD=$RCON_ADMIN_PASSWORD" >> $config_file
 
+copy_only=$1
+
+if [ $copy_only = "copy-only" ]
+then
+    echo "Copy only"
+    exit 0
+fi
+
 # create db
 bash ./scripts/init_db.sh
 # generate crontab

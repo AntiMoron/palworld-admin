@@ -7,6 +7,7 @@ export interface Group {
   group_id: string;
   group_name: string;
   group_type: string;
+  guild_name: string;
 }
 
 export async function getGroups() {
@@ -31,10 +32,12 @@ export async function saveGroup(group: Omit<Group, "id">) {
   if (old) {
     await client("game_group")
       .where("id", old.id)
-      .update(omit(group, ["group_id", "individual_character_handle_ids"]));
+      .update(
+        omit(group, ["group_id", "individual_character_handle_ids", "players"])
+      );
   } else {
     await client("game_group").insert(
-      omit(group, ["individual_character_handle_ids"])
+      omit(group, ["individual_character_handle_ids", "players"])
     );
   }
 }

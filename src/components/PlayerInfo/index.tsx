@@ -13,20 +13,23 @@ interface Props extends Player {
 }
 
 export default function PlayerInfo(props: Props) {
-  const { className, style, onViewGuild, nickname, player_id, steam_id } =
+  const { className, style, onViewGuild, nick_name, player_uid, steam_id } =
     props;
   return (
-    <div className={cx(styles.playerInfo, className)} style={style}>
-      <div className={styles.left}>
-        <div>{nickname}</div>
-        <div className={styles.lower}>
-          <Paragraph copyable>{player_id}</Paragraph>
-          <Paragraph copyable>{steam_id}</Paragraph>
+    <>
+      <div className={cx(styles.playerInfo, className)} style={style}>
+        <div className={styles.left}>
+          <div>{nick_name}</div>
+          <div className={styles.lower}>
+            <Paragraph copyable>{player_uid}</Paragraph>
+            <Paragraph copyable>{steam_id}</Paragraph>
+          </div>
         </div>
+        <Button type="link" onClick={onViewGuild}>
+          View his/her Guild
+        </Button>
       </div>
-      <Button type="link" onClick={onViewGuild}>
-        View his/her Guild
-      </Button>
-    </div>
+      <div></div>
+    </>
   );
 }

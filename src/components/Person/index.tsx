@@ -5,7 +5,7 @@ import styles from "./index.module.sass";
 import dayjs from "dayjs";
 
 interface Props {
-  nickname: string;
+  nick_name: string;
   level?: string | number;
   online?: boolean;
   lastLoginAt: string;
@@ -14,7 +14,7 @@ interface Props {
 }
 
 export default function Person(props: Props) {
-  const { onClick, selected, nickname, level, online, lastLoginAt } = props;
+  const { onClick, selected, nick_name, level, online, lastLoginAt } = props;
 
   let d = "";
   try {
@@ -29,7 +29,7 @@ export default function Person(props: Props) {
       onClick={onClick}
     >
       <div className={styles.heading}>
-        <div className={styles.nick}>{nickname}</div>
+        <div className={styles.nick}>{nick_name}</div>
         <Tag className={styles.tag} color="gold">
           Level: {level || "0"}
         </Tag>

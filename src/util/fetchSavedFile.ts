@@ -11,7 +11,9 @@ function getWorkTypeValue(craftSpeedsValue: any) {
   return values.map((value: any) => {
     const { WorkSuitability, Rank } = value;
     const rank = unwrapValue(Rank);
-    const workSuitability = unwrapValue(WorkSuitability).replace(
+    const workSuitabilityValue = unwrapValue(WorkSuitability);
+    console.log("unwrapped workSuitabilityValue: ", workSuitabilityValue);
+    const workSuitability = workSuitabilityValue?.value?.replace(
       "EPalWorkSuitability::",
       ""
     );
@@ -61,11 +63,20 @@ function unwrapValue(data: any) {
   if (typeof data !== "object") {
     return data;
   }
-  if (Array.isArray(data)) {
-    return data;
-  }
   const value = data && data.value;
-  return unwrapValue(value);
+  if (data) {
+    const { type, struct_type } = data;
+    if (type === "FloatProperty") {
+      return data?.value;
+    }
+    if (struct_type === "FixedPoint64") {
+      return value?.Value?.value;
+    }
+  }
+  if (typeof value === "object" && value && value.value) {
+    return data?.value;
+  }
+  return value;
 }
 
 export default function fetchSavedFile(fileDir: string) {
@@ -74,174 +85,195 @@ export default function fetchSavedFile(fileDir: string) {
     players: Character[];
     pals: Character[];
     guilds: any[];
+    realTimeTick: number;
     // WorkSaveData: any;
     // BaseCampSaveData: any;
     // CharacterContainerSaveData: any;
   }>((resolve, reject) => {
     // copy and parse
-    return runBash(
-      `rm -rf ./tmp_save && mkdir -p ./tmp_save && cp ${fileDir} ./tmp_save/`
-    ).then(() => {
-      const baseDir = process.cwd();
-      const handleTmpFolder = "./tmp_save/";
-      const levelSavFile = handleTmpFolder + fileDir.split("/").pop();
-      const destFile = `${handleTmpFolder}save.json`;
+    const baseDir = process.cwd();
+    const handleTmpFolder = "./tmp_save/";
+    const levelSavFile = handleTmpFolder + fileDir.split("/").pop();
+    const destFile = `${handleTmpFolder}save.json`;
 
-      // Check if the folder exists
-      if (fs.existsSync(handleTmpFolder)) {
-        // Check if the file does not exist
-        if (!fs.existsSync(destFile)) {
-          // last sync not ready yet.
-          return;
-        }
-      }
+    // Check if the folder exists
+    if (fs.existsSync(handleTmpFolder) && !fs.existsSync(destFile)) {
+      // last sync not ready yet.
+      reject(new Error("last sync not ready yet."));
+      return;
+    }
+    return runBash(`mkdir -p ./tmp_save && cp ${fileDir} ./tmp_save/`).then(
+      () => {
+        runBash(
+          `bash ${path.join(
+            baseDir,
+            ""
+          )}/scripts/parse_sav.sh "${levelSavFile}" "${destFile}"`
+        )
+          .then(() => {
+            const stream = fs.createReadStream(destFile);
 
-      runBash(
-        `bash ${path.join(
-          baseDir,
-          ""
-        )}/scripts/parse_sav.sh "${levelSavFile}" "${destFile}"`
-      ).then(() => {
-        const stream = fs.createReadStream(
-          "./tmp_save/" + fileDir.split("/").pop()
-        );
-
-        stream.pipe(JSONStream.parse(undefined)).on("data", (data) => {
-          try {
-            const { CharacterSaveParameterMap, GroupSaveDataMap } = data;
-            const characters = CharacterSaveParameterMap.value.map(
-              (item: any) => {
-                const key = item.key;
-                const playerUid = key.PlayerUId.value;
-                const instanceId = key.InstanceId.value;
-
-                const params =
-                  item.value.RawData.value.object.SaveParameter.value;
+            stream.pipe(JSONStream.parse(undefined)).on("data", (data) => {
+              try {
                 const {
-                  Level,
-                  Exp,
-                  NickName,
-                  HP,
-                  FullStomach,
-                  PhysicalHealth,
-                  IsPlayer,
-                  MaxHP,
-                  ShieldMaxHP,
-                  MaxSP,
-                  GotStatusPointList,
-                  CharacterID,
-                  Gender,
-                  EquipWaza,
-                  MasteredWaza,
-                  Talent_HP,
-                  Talent_Melee,
-                  Talent_Shot,
-                  Talent_Defense,
-                  PassiveSkillList,
-                  MP,
-                  OwnedTime,
-                  OwnerPlayerUId,
-                  OldOwnerPlayerUIds,
-                  CraftSpeed,
-                  CraftSpeeds, // 各种属性
-                  EquipItemContainerId,
-                  SlotID,
-                  SlotIndex,
-                } = params;
-                if (PassiveSkillList?.value) {
-                  console.log(PassiveSkillList.value?.values);
+                  CharacterSaveParameterMap,
+                  GroupSaveDataMap,
+                  GameTimeSaveData,
+                } = data;
+                const realTimeTick =
+                  GameTimeSaveData?.value?.RealDateTimeTicks?.value || 0;
+                const characters = CharacterSaveParameterMap.value.map(
+                  (item: any) => {
+                    const key = item.key;
+                    const playerUid = key.PlayerUId.value;
+                    const instanceId = key.InstanceId.value;
+
+                    const params =
+                      item.value.RawData.value.object.SaveParameter.value;
+                    const {
+                      Level,
+                      Exp,
+                      NickName,
+                      HP,
+                      FullStomach,
+                      PhysicalHealth,
+                      IsPlayer,
+                      MaxHP,
+                      ShieldMaxHP,
+                      MaxSP,
+                      GotStatusPointList,
+                      CharacterID,
+                      Gender,
+                      EquipWaza,
+                      MasteredWaza,
+                      Talent_HP,
+                      Talent_Melee,
+                      Talent_Shot,
+                      Talent_Defense,
+                      PassiveSkillList,
+                      MP,
+                      OwnedTime,
+                      OwnerPlayerUId,
+                      OldOwnerPlayerUIds,
+                      CraftSpeed,
+                      CraftSpeeds, // 各种属性
+                      EquipItemContainerId,
+                      SlotID,
+                      SlotIndex,
+                    } = params;
+                    if (PassiveSkillList?.value) {
+                      console.log(PassiveSkillList.value?.values);
+                    }
+                    return {
+                      playerUid,
+                      instanceId,
+                      Level: unwrapValue(Level),
+                      Exp: unwrapValue(Exp),
+                      NickName: unwrapValue(NickName),
+                      HP: unwrapValue(HP),
+                      FullStomach: unwrapValue(FullStomach),
+                      PhysicalHealth: unwrapValue(PhysicalHealth),
+                      IsPlayer: unwrapValue(IsPlayer),
+                      MaxHP: unwrapValue(MaxHP),
+                      ShieldMaxHP: unwrapValue(ShieldMaxHP),
+                      MaxSP: unwrapValue(MaxSP),
+                      GotStatusPointList: unwrapValue(GotStatusPointList),
+                      CharacterID: unwrapValue(CharacterID),
+                      Gender: unwrapValue(Gender),
+                      EquipWaza: unwrapValue(EquipWaza),
+                      MasteredWaza: unwrapValue(MasteredWaza),
+                      Talent_HP: unwrapValue(Talent_HP),
+                      Talent_Melee: unwrapValue(Talent_Melee),
+                      Talent_Shot: unwrapValue(Talent_Shot),
+                      Talent_Defense: unwrapValue(Talent_Defense),
+                      PassiveSkillList: PassiveSkillList?.value?.values || [],
+                      CraftSpeeds: getWorkTypeValue(CraftSpeeds.value),
+                      MP: unwrapValue(MP),
+                      OwnedTime: unwrapValue(OwnedTime),
+                      OwnerPlayerUId: unwrapValue(OwnerPlayerUId),
+                      OldOwnerPlayerUIds: unwrapValue(OldOwnerPlayerUIds),
+                      CraftSpeed: unwrapValue(CraftSpeed),
+                      EquipItemContainerId: unwrapValue(EquipItemContainerId),
+                      SlotID: unwrapValue(SlotID),
+                      SlotIndex: unwrapValue(SlotIndex),
+                    } as Character;
+                  }
+                );
+                const players = characters.filter((item: any) => item.IsPlayer);
+                const pals = characters.filter((item: any) => !item.IsPlayer);
+                const playerInstanceIdMap = players.reduce(
+                  (pre: any, cur: Character) => {
+                    pre[cur.instanceId] = cur;
+                    return pre;
+                  },
+                  {} as Record<string, Character>
+                );
+
+                const guilds = GroupSaveDataMap.value
+                  .filter((item: any) => {
+                    const value = item.value;
+                    if (!value) {
+                      return false;
+                    }
+                    if (!value.GroupType) {
+                      console.log(item);
+                      return;
+                    }
+                    try {
+                      return (
+                        value.GroupType.value.value === "EPalGroupType::Guild"
+                      );
+                    } catch {
+                      return false;
+                    }
+                  })
+                  .map((a: any) => {
+                    const value = a.value.RawData.value;
+                    const {
+                      group_type,
+                      group_id,
+                      group_name,
+                      guild_name,
+                      individual_character_handle_ids,
+                      admin_player_uid,
+                      base_camp_level,
+                      base_ids,
+                      players,
+                    } = value;
+                    return {
+                      group_type,
+                      group_id,
+                      group_name,
+                      guild_name,
+                      base_ids,
+                      base_camp_level,
+                      individual_character_handle_ids,
+                      admin_player_uid,
+                      players,
+                    };
+                  });
+                if (resolve) {
+                  runBash(`rm -rf ./tmp_save`).then(() => {
+                    resolve({
+                      playerInstanceIdMap,
+                      players,
+                      pals,
+                      guilds,
+                      realTimeTick,
+                    });
+                  });
                 }
-                return {
-                  playerUid,
-                  instanceId,
-                  Level: unwrapValue(Level),
-                  Exp: unwrapValue(Exp),
-                  NickName: unwrapValue(NickName),
-                  HP: unwrapValue(HP),
-                  FullStomach: unwrapValue(FullStomach),
-                  PhysicalHealth: unwrapValue(PhysicalHealth),
-                  IsPlayer: unwrapValue(IsPlayer),
-                  MaxHP: unwrapValue(MaxHP),
-                  ShieldMaxHP: unwrapValue(ShieldMaxHP),
-                  MaxSP: unwrapValue(MaxSP),
-                  GotStatusPointList: unwrapValue(GotStatusPointList),
-                  CharacterID: unwrapValue(CharacterID),
-                  Gender: unwrapValue(Gender),
-                  EquipWaza: unwrapValue(EquipWaza),
-                  MasteredWaza: unwrapValue(MasteredWaza),
-                  Talent_HP: unwrapValue(Talent_HP),
-                  Talent_Melee: unwrapValue(Talent_Melee),
-                  Talent_Shot: unwrapValue(Talent_Shot),
-                  Talent_Defense: unwrapValue(Talent_Defense),
-                  PassiveSkillList: PassiveSkillList?.value?.values || [],
-                  CraftSpeeds: getWorkTypeValue(CraftSpeeds.value),
-                  MP: unwrapValue(MP),
-                  OwnedTime: unwrapValue(OwnedTime),
-                  OwnerPlayerUId: unwrapValue(OwnerPlayerUId),
-                  OldOwnerPlayerUIds: unwrapValue(OldOwnerPlayerUIds),
-                  CraftSpeed: unwrapValue(CraftSpeed),
-                  EquipItemContainerId: unwrapValue(EquipItemContainerId),
-                  SlotID: unwrapValue(SlotID),
-                  SlotIndex: unwrapValue(SlotIndex),
-                } as Character;
+              } catch (err) {
+                if (reject) {
+                  reject(err);
+                }
               }
-            );
-            const players = characters.filter((item: any) => item.IsPlayer);
-            const pals = characters.filter((item: any) => !item.IsPlayer);
-            const playerInstanceIdMap = players.reduce(
-              (pre: any, cur: Character) => {
-                pre[cur.instanceId] = cur;
-                return pre;
-              },
-              {} as Record<string, Character>
-            );
-
-            const guilds = GroupSaveDataMap.value
-              .filter((item: any) => {
-                const value = item.value;
-                if (!value) {
-                  return false;
-                }
-                if (!value.GroupType) {
-                  console.log(item);
-                  return;
-                }
-                try {
-                  return value.GroupType.value.value === "EPalGroupType::Guild";
-                } catch {
-                  return false;
-                }
-              })
-              .map((a: any) => {
-                const value = a.value.RawData.value;
-                const {
-                  group_type,
-                  group_id,
-                  group_name,
-                  individual_character_handle_ids,
-                } = value;
-                return {
-                  group_type,
-                  group_id,
-                  group_name,
-                  individual_character_handle_ids,
-                };
-              });
-            if (resolve) {
-              resolve({
-                playerInstanceIdMap,
-                players,
-                pals,
-                guilds,
-              });
-            }
-          } catch (err) {
-            if (reject) {
-              reject(err);
-            }
-          }
-        });
-      });
-    });
+            });
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      }
+    );
   });
 }
