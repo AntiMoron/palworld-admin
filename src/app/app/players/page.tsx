@@ -30,6 +30,10 @@ export default function Component(props: any) {
     })
       .then((res) => res.json())
       .then((data) => {
+        if (data.error) {
+          router.replace("/");
+          return;
+        }
         setPlayers(data);
         if (playerUid) {
           const player = data.find((p: Player) => p.player_uid === playerUid);
@@ -37,8 +41,7 @@ export default function Component(props: any) {
         } else {
           setCurPlayer(data?.[0]);
         }
-      })
-      .catch(() => router.replace("/"));
+      });
   }, []);
   useEffect(() => {
     if (!curPlayer) {
@@ -55,9 +58,12 @@ export default function Component(props: any) {
     )
       .then((res) => res.json())
       .then((pals) => {
+        if (pals.error) {
+          router.replace("/");
+          return;
+        }
         setPals(pals);
       })
-      .catch(() => router.replace("/"))
       .finally(() => {
         setLoading(false);
       });

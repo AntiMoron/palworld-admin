@@ -39,7 +39,7 @@ export default function Login() {
           name="password"
           label={<span style={{ color: "#fff" }}>Admin Panel Password</span>}
         >
-          <Input placeholder="admin panel password" />
+          <Input type="password" placeholder="admin panel password" />
         </Form.Item>
         <Button type="primary" htmlType="submit">
           Submit

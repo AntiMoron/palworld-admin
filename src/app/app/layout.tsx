@@ -13,7 +13,7 @@ export default async function RootLayout({
     <div className={styles.frame}>
       <Menu />
       <MotionBackground />
-      <main className="overflow-y-auto">
+      <main className="w-full overflow-y-auto">
         <div className="container px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
           <GlobalHeading />
           <ConfigProvider>{children}</ConfigProvider>

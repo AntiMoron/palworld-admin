@@ -25,8 +25,11 @@ export default function Component(props: any) {
       },
     })
       .then((res) => res.json())
-      .catch(() => router.replace("/"))
       .then((data) => {
+        if (data.error) {
+          router.replace("/");
+          return;
+        }
         data.sort((a: Group, b: Group) => {
           if (a.guild_name === "Unnamed Guild") return 1;
           if (b.guild_name === "Unnamed Guild") return -1;
@@ -55,9 +58,12 @@ export default function Component(props: any) {
     })
       .then((r) => r.json())
       .then((data) => {
+        if (data.error) {
+          router.replace("/");
+          return;
+        }
         setPlayers(data);
       })
-      .catch(() => router.replace("/"))
       .finally(() => {
         setLoading(false);
       });

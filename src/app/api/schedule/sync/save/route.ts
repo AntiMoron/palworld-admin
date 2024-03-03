@@ -6,12 +6,17 @@ import { saveGroup, saveGroupRelation } from "@/util/group";
 import { handleRawSavedPlayer, savePlayer } from "@/util/player";
 import runBash from "@/util/script";
 import dayjs from "dayjs";
+import { syncAuth } from "@/util/auth";
+import { NextRequest } from "next/server";
 
-export async function POST() {
+export async function POST(req: NextRequest) {
   try {
     console.log("triggered SaveFile: Level.sav sync");
     const config = getConfig();
     const fileDir = config.SAVE_FILE_DIR || "";
+    const syncToken = req.headers.get("__sync_token");
+    // check sync permission
+    syncAuth(syncToken || "");
     console.log("SAVE_FILE_DIR", config.SAVE_FILE_DIR);
     if (!fileDir) {
       throw new Error("SAVE_FILE_DIR is not set");
@@ -100,8 +105,13 @@ export async function POST() {
     return Response.json({ OK: true });
   } catch (err) {
     console.log(err);
-    return Response.json({
-      error: (err as Error)?.message || err,
-    });
+    return Response.json(
+      {
+        error: (err as Error)?.message || err,
+      },
+      {
+        status: 400,
+      }
+    );
   }
 }

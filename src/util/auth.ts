@@ -1,3 +1,4 @@
+import getConfig from "./getConfig";
 import getClient from "./getDbClient";
 import jwt from "jsonwebtoken";
 
@@ -49,5 +50,20 @@ export async function login(username: string, password: string) {
       token,
       expiresIn: 3600,
     };
+  }
+}
+
+/**
+ * Auth for calling sync api
+ * @param tokenForSync to be authenticated
+ */
+export function syncAuth(tokenForSync: string) {
+  const config = getConfig();
+  const syncToken = config.SYNC_TOKEN;
+  if (!syncToken) {
+    throw new Error("SYNC_TOKEN is not set");
+  }
+  if (tokenForSync !== syncToken) {
+    throw new Error("You are not allowed to sync");
   }
 }

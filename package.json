@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start --port 3000",
     "lint": "next lint",
+    "build:sync:save": "tsc --project ./sync-node",
     "build:save_sync": "pyinstaller --onefile sync_save.py && mv dist/sync_save ./"
   },
   "dependencies": {
@@ -31,6 +32,7 @@
     "lucide-react": "^0.336.0",
     "modern-rcon": "^1.0.3",
     "next": "14.1.0",
+    "node-schedule": "^2.1.1",
     "path": "^0.12.7",
     "rcon": "^1.1.0",
     "react": "^18",
