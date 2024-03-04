@@ -8,6 +8,7 @@ import runBash from "@/util/script";
 import dayjs from "dayjs";
 import { syncAuth } from "@/util/auth";
 import { NextRequest } from "next/server";
+import getSyncStats, { SyncStats } from "@/util/syncStats";
 
 export async function POST(req: NextRequest) {
   try {
@@ -27,6 +28,10 @@ export async function POST(req: NextRequest) {
     const filename = files.split("\n")?.[0];
     const fileUtc = getFileUtcTimeStamp(filename);
     console.log("start to read " + filename);
+    const status = getSyncStats();
+    if (status === SyncStats.SYNCING) {
+      throw new Error("Last sync not finished yet.");
+    }
     const data = await fetchSavedFile(filename);
     console.log("finish to read");
     const {

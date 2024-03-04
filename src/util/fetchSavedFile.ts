@@ -95,13 +95,6 @@ export default function fetchSavedFile(fileDir: string) {
     const handleTmpFolder = "./tmp_save/";
     const levelSavFile = handleTmpFolder + fileDir.split("/").pop();
     const destFile = `${handleTmpFolder}save.json`;
-
-    // Check if the folder exists
-    if (fs.existsSync(handleTmpFolder) && !fs.existsSync(destFile)) {
-      // last sync not ready yet.
-      reject(new Error("last sync not ready yet."));
-      return;
-    }
     return runBash(`mkdir -p ./tmp_save && cp ${fileDir} ./tmp_save/`).then(
       () => {
         runBash(

@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./index.module.sass";
 import { Player } from "@/util/player";
-import { Spin, Table, Tag, Typography } from "antd";
+import { Spin, Table, Tag, Typography, Result } from "antd";
 import { Group } from "@/util/group";
 import Guild from "@/components/Guild";
 import { useRouter } from "next/navigation";
@@ -69,6 +69,11 @@ export default function Component(props: any) {
       });
   }, [curGroup]);
 
+  if (Array.isArray(players) && players.length === 0) {
+    return (
+      <Result title="No Guilds' Data Found" subTitle="Please wait next sync." />
+    );
+  }
   return (
     <Spin spinning={!groups} style={{ background: "transparent" }}>
       <Title level={2}> Guilds</Title>
@@ -98,7 +103,7 @@ export default function Component(props: any) {
         <div className={styles.right}>
           {curGroup && (
             <div>
-              <div>{curGroup.group_name}</div>
+              <div>{curGroup.guild_name || curGroup.group_name}</div>
               <Paragraph copyable>{curGroup.group_id}</Paragraph>
             </div>
           )}
