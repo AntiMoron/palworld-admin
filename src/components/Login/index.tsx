@@ -29,7 +29,7 @@ export default function Login() {
                 message.error(data.error);
                 return;
               }
-              router.push("/app/players");
+              router.replace("/app/players");
             });
         }}
         layout="vertical"

@@ -5,6 +5,8 @@ import omit from "lodash/omit";
 export interface Player {
   id: number;
   steam_id: string;
+  mastered_waza?: string;
+  equip_waza?: string;
   player_uid: string;
   gender: string;
   exp: number;
@@ -45,6 +47,8 @@ export async function getAllPlayers(filter?: {
   order_by?: "level" | "id" | "last_login_at";
   groupId?: string;
   isPlayer?: boolean;
+  instanceId?: string;
+  playerUid?: string;
 }) {
   const client = getClient();
   const sql = client("game_character")
@@ -86,7 +90,15 @@ export async function getAllPlayers(filter?: {
     })
     .whereNot("game_character.level", 0);
   if (filter) {
-    const { isPlayer, order, order_by, groupId, ownerId } = filter;
+    const {
+      isPlayer,
+      order,
+      order_by,
+      groupId,
+      ownerId,
+      playerUid,
+      instanceId,
+    } = filter;
     if (order_by) {
       sql.orderBy(order_by, order || "desc");
     }
@@ -98,6 +110,12 @@ export async function getAllPlayers(filter?: {
     }
     if (groupId) {
       sql.where("game_group.group_id", groupId);
+    }
+    if (instanceId) {
+      sql.where("game_character.instance_id", instanceId);
+    }
+    if (playerUid) {
+      sql.where("game_character.player_uid", playerUid);
     }
   }
   const items = await sql;

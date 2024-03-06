@@ -19,6 +19,8 @@ export async function GET(res: NextRequest) {
     const order = (params.get("order") || "desc") as "desc" | "asc";
     const orderBy = params.get("orderBy") || undefined;
     const ownerId = params.get("ownerId") || undefined;
+    const playerUid = params.get("playerUid") || undefined;
+    const instanceId = params.get("instanceId") || undefined;
     const isPlayer =
       params.get("isPlayer") === "true" ||
       (params.get("isPlayer") === "false" && false);
@@ -29,6 +31,8 @@ export async function GET(res: NextRequest) {
         order_by: orderBy as any,
         isPlayer,
         order,
+        playerUid,
+        instanceId,
       })
     );
   } catch (err) {

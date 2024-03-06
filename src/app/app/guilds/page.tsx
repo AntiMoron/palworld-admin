@@ -69,7 +69,7 @@ export default function Component(props: any) {
       });
   }, [curGroup]);
 
-  if (Array.isArray(players) && players.length === 0) {
+  if (Array.isArray(groups) && groups.length === 0) {
     return (
       <Result title="No Guilds' Data Found" subTitle="Please wait next sync." />
     );

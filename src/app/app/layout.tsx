@@ -3,6 +3,7 @@ import { ConfigProvider } from "antd";
 import MotionBackground from "@/components/Motion";
 import Menu from "@/components/Menu";
 import GlobalHeading from "@/components/GlobalHeading";
+import ReturnMark from "@/components/ReturnMark";
 
 export default async function RootLayout({
   children,
@@ -19,6 +20,7 @@ export default async function RootLayout({
           <ConfigProvider>{children}</ConfigProvider>
         </div>
       </main>
+      <ReturnMark />
     </div>
   );
 }

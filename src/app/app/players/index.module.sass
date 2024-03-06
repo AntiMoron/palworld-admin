@@ -15,6 +15,28 @@
     overflow: hidden
     flex: 1
     box-sizing: border-box
+    .playerInfo
+      margin-bottom: 10px
+    .palsCount
+      margin-bottom: 10px
+      font-weight: bold
   &.playerDetail
     .leftPlayers
       display: none
+
+@media screen and (max-width: 640px)
+  .container
+    width: 100%
+    flex: 1
+    .leftPlayers
+      width: 100%
+      flex: 1
+      box-sizing: border-box
+      max-width: unset
+    .right
+      display: none
+    &.playerDetail
+      .leftPlayers
+        display: none
+      .right
+        display: block

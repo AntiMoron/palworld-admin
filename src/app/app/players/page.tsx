@@ -11,6 +11,7 @@ import cx from "classnames";
 import { useRouter } from "next/navigation";
 import formatNumber from "@/util/formatNumber";
 import PalData from "@/components/PalData";
+import ReturnMark from "@/components/ReturnMark";
 
 const { Title, Paragraph } = Typography;
 
@@ -107,17 +108,30 @@ export default function Component(props: any) {
         </div>
         <div className={styles.right}>
           {curPlayer && (
-            <PlayerInfo
-              {...curPlayer}
-              onViewGuild={() => {
-                router.push(`/guilds/${(curPlayer as any)?.group_id}`);
-              }}
-            />
+            <>
+              <PlayerInfo
+                className={styles.playerInfo}
+                {...curPlayer}
+                onViewGuild={() => {
+                  router.push(`/app/guilds/${(curPlayer as any)?.group_id}`);
+                }}
+              />
+              <div className={styles.palsCount}>
+                Total {pals?.length || "- -"}
+              </div>
+            </>
           )}
           <Table
             dataSource={pals}
             loading={loading}
             scroll={{ x: 1400 }}
+            onRow={(record) => {
+              return {
+                onClick: () => {
+                  router.push(`/app/pal/${record.instance_id}`);
+                },
+              };
+            }}
             columns={[
               {
                 dataIndex: "nick_name",
