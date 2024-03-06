@@ -34,4 +34,5 @@ body {
 
 .container {
   padding-top: 0 !important;
+  min-height: calc(100vh - 60px);
 }
