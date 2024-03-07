@@ -3,7 +3,7 @@ import fetchSavedFile from "@/util/fetchSavedFile";
 import getConfig from "@/util/getConfig";
 import getFileUtcTimeStamp from "@/util/getFileUtcTimeStamp";
 import { saveGroup, saveGroupRelation } from "@/util/group";
-import { handleRawSavedPlayer, savePlayer } from "@/util/player";
+import { handleRawSavedPlayer, savePal, savePlayer } from "@/util/player";
 import runBash from "@/util/script";
 import dayjs from "dayjs";
 import { syncAuth } from "@/util/auth";
@@ -83,7 +83,7 @@ export async function POST(req: NextRequest) {
     for (const pal of pals) {
       try {
         // console.log(pal);
-        await savePlayer(
+        await savePal(
           handleRawSavedPlayer({
             ...pal,
             last_login_at: dayjs().format("YYYY-MM-DD HH:mm:ss"),

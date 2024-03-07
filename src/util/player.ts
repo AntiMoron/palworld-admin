@@ -129,7 +129,27 @@ export async function savePlayer(player: Omit<Player, "id">) {
   if (old) {
     await client("game_character")
       .where("id", old.id)
-      .update(omit(player, ["player_uid", "instance_id", "player_uid", "id"]));
+      .update(omit(player, ["player_uid", "instance_id", "id"]));
+  } else {
+    await client("game_character").insert(player);
+  }
+}
+
+export async function getPlayerByInstanceId(instanceId: string) {
+  const client = getClient();
+  const items = await client("game_character")
+    .select()
+    .where("instance_id", instanceId);
+  return items?.[0] as Player;
+}
+
+export async function savePal(player: Omit<Player, "id">) {
+  const client = getClient();
+  const old = await getPlayerByInstanceId(player.instance_id);
+  if (old) {
+    await client("game_character")
+      .where("id", old.id)
+      .update(omit(player, ["player_uid", "instance_id", "id"]));
   } else {
     await client("game_character").insert(player);
   }
