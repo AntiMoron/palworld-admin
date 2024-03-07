@@ -1,19 +1,23 @@
 "use client";
 import { Button, Form, Input, message } from "antd";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 import sha256 from "sha256";
 import styles from "./index.module.sass";
 import i18n from "@/util/i18n";
 
 export default function Login() {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   return (
     <div className={styles.border}>
       <h1 className={styles.h1}>{i18n("palworld_admin_panel")}</h1>
       <Form
         className={styles.form}
         onFinish={(values: any) => {
+          if (loading) {
+            return;
+          }
           const { password } = values;
           fetch("/api/auth", {
             method: "POST",
@@ -42,7 +46,7 @@ export default function Login() {
         >
           <Input type="password" placeholder="admin panel password" />
         </Form.Item>
-        <Button type="primary" htmlType="submit">
+        <Button loading={loading} type="primary" htmlType="submit">
           {i18n("login_btn")}
         </Button>
       </Form>

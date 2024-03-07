@@ -35,7 +35,7 @@ export default function DarkMode() {
   return (
     <FloatButton
       icon={isDark ? <SunOutlined /> : <MoonOutlined />}
-      style={{ bottom: 94 }}
+      style={{ bottom: 100 }}
       onClick={() => {
         toggle(!isDark);
       }}
