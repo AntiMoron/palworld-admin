@@ -6,6 +6,10 @@ const m: any = { cn, en, jp };
 let _lang = "en";
 let _dict = m[_lang];
 
+export function getLang() {
+  return _lang;
+}
+
 export function setLang(lang: string) {
   _lang = lang;
   switch (lang) {

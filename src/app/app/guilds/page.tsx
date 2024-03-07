@@ -8,7 +8,7 @@ import { Group } from "@/util/group";
 import Guild from "@/components/Guild";
 import { useRouter } from "next/navigation";
 import cx from "classnames";
-import i18n from "@/util/i18n";
+import i18n, { getLang } from "@/util/i18n";
 
 const { Title, Paragraph } = Typography;
 
@@ -97,7 +97,9 @@ export default function Component(props: any) {
                 onClick={() => {
                   const isMobile = window.innerWidth < 640;
                   if (isMobile) {
-                    router.push(`/app/guilds/${group?.group_id}`);
+                    router.push(
+                      `/app/guilds/${group?.group_id}?lang=${getLang()}`
+                    );
                     return;
                   }
                   setCurGroup(group);
@@ -130,7 +132,9 @@ export default function Component(props: any) {
             onRow={(record) => {
               return {
                 onClick: () => {
-                  router.push(`/app/players/${record.player_uid}`);
+                  router.push(
+                    `/app/players/${record.player_uid}?lang=${getLang()}`
+                  );
                 },
               };
             }}

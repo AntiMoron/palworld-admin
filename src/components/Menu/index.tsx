@@ -10,22 +10,25 @@ import PalworldVersion from "../PalworldVer";
 import BroadCast from "../Broadcast";
 import Language from "../Language";
 import i18n from "@/util/i18n";
+import { useSearchParams } from "next/navigation";
 
 export default function Menu() {
   const [open, setOpen] = useState(false);
+  const searchParams = useSearchParams();
+  const lang = searchParams?.get("lang") || "en";
   const menu = (
     <div className={cx("flex-1 overflow-auto py-4", styles.menu)}>
       <nav className="grid gap-1">
         <Link
           className="flex items-center h-10 px-4 rounded-md text-sm font-medium transition-colors bg-transparent text-black hover:bg-gray-100 hover:text-gray-900"
-          href="/app/players"
+          href={`/app/players?lang=${lang}`}
         >
           <MehOutlined className="mr-2 h-4 w-4" />
           {i18n("player_title")}
         </Link>
         <Link
           className="flex items-center h-10 px-4 rounded-md text-sm font-medium transition-colors bg-transparent text-black hover:bg-gray-100 hover:text-gray-900"
-          href="/app/guilds"
+          href={`/app/guilds?lang=${lang}`}
         >
           <TeamOutlined className="mr-2 h-4 w-4" />
           {i18n("guild_title")}
@@ -40,7 +43,7 @@ export default function Menu() {
           <div className="flex h-[60px] items-center">
             <Link
               className="flex items-center gap-2 text-xl font-semibold px-6 bg-transparent text-black"
-              href="/app/players"
+              href={`/app/players?lang=${lang}`}
             >
               {i18n("palworld_admin_panel")}
             </Link>

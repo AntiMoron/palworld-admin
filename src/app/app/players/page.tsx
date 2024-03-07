@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 import formatNumber from "@/util/formatNumber";
 import PalData from "@/components/PalData";
 import ReturnMark from "@/components/ReturnMark";
-import i18n from "@/util/i18n";
+import i18n, { getLang } from "@/util/i18n";
 
 const { Title, Paragraph } = Typography;
 
@@ -90,7 +90,9 @@ export default function Component(props: any) {
                 onClick={() => {
                   const isMobile = window.innerWidth < 640;
                   if (isMobile) {
-                    router.push(`/app/players/${datum?.player_uid}`);
+                    router.push(
+                      `/app/players/${datum?.player_uid}?lang=${getLang()}`
+                    );
                     return;
                   }
                   setPage(1);
@@ -109,7 +111,11 @@ export default function Component(props: any) {
                 className={styles.playerInfo}
                 {...curPlayer}
                 onViewGuild={() => {
-                  router.push(`/app/guilds/${(curPlayer as any)?.group_id}`);
+                  router.push(
+                    `/app/guilds/${
+                      (curPlayer as any)?.group_id
+                    }?lang=${getLang()}`
+                  );
                 }}
               />
               <div className={styles.palsCount}>
@@ -126,7 +132,9 @@ export default function Component(props: any) {
             onRow={(record) => {
               return {
                 onClick: () => {
-                  router.push(`/app/pal/${record.instance_id}`);
+                  router.push(
+                    `/app/pal/${record.instance_id}?lang=${getLang()}`
+                  );
                 },
               };
             }}
