@@ -27,6 +27,6 @@ export async function POST(req: NextRequest) {
       }
     );
   } catch (err) {
-    Response.json(err, { status: 401 });
+    return Response.json(err, { status: 401 });
   }
 }
