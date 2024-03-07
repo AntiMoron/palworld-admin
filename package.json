@@ -11,6 +11,7 @@
     "build:save_sync": "pyinstaller --onefile sync_save.py && mv dist/sync_save ./"
   },
   "dependencies": {
+    "@formatjs/intl-localematcher": "^0.5.4",
     "@radix-ui/react-checkbox": "^1.0.4",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
     "@radix-ui/react-icons": "^1.3.0",
@@ -33,6 +34,7 @@
     "lodash": "^4.17.21",
     "lucide-react": "^0.336.0",
     "modern-rcon": "^1.0.3",
+    "negotiator": "^0.6.3",
     "next": "14.1.0",
     "nightwind": "^1.1.13",
     "node-schedule": "^2.1.1",

@@ -8,6 +8,7 @@ import { Group } from "@/util/group";
 import Guild from "@/components/Guild";
 import { useRouter } from "next/navigation";
 import cx from "classnames";
+import i18n from "@/util/i18n";
 
 const { Title, Paragraph } = Typography;
 
@@ -71,13 +72,11 @@ export default function Component(props: any) {
   }, [curGroup]);
 
   if (Array.isArray(groups) && groups.length === 0) {
-    return (
-      <Result title="No Guilds' Data Found" subTitle="Please wait next sync." />
-    );
+    return <Result title={i18n("no_guild")} subTitle={i18n("wait_sync")} />;
   }
   return (
     <Spin spinning={!groups} style={{ background: "transparent" }}>
-      <Title level={2}> Guilds</Title>
+      <Title level={2}> {i18n("guild_title")}</Title>
       <div
         className={cx(styles.container, {
           [styles.playerDetail]: Boolean(guildId),
@@ -137,16 +136,16 @@ export default function Component(props: any) {
             }}
             columns={[
               {
-                title: "Guild Name",
+                title: i18n("guild_name"),
                 dataIndex: "nick_name",
               },
               {
-                title: "Level",
+                title: i18n("level"),
                 dataIndex: "level",
                 render: (data) => <Tag color="gold">{data}</Tag>,
               },
               {
-                title: "status",
+                title: i18n("player_status"),
                 dataIndex: "status",
               },
             ]}

@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import formatNumber from "@/util/formatNumber";
 import PalData from "@/components/PalData";
 import ReturnMark from "@/components/ReturnMark";
+import i18n from "@/util/i18n";
 
 const { Title, Paragraph } = Typography;
 
@@ -70,16 +71,11 @@ export default function Component(props: any) {
       });
   }, [curPlayer]);
   if (Array.isArray(players) && players.length === 0) {
-    return (
-      <Result
-        title="No Players' Data Found"
-        subTitle="Please wait next sync."
-      />
-    );
+    return <Result title={i18n("no_player")} subTitle={i18n("wait_sync")} />;
   }
   return (
     <Spin spinning={!players} style={{ background: "transparent" }}>
-      <Title level={2}>{"Players"}</Title>
+      <Title level={2}>{i18n("player_title")}</Title>
       <div
         className={cx(styles.container, {
           [styles.playerDetail]: Boolean(playerUid),
@@ -117,7 +113,9 @@ export default function Component(props: any) {
                 }}
               />
               <div className={styles.palsCount}>
-                Total {pals?.length || "- -"}
+                {i18n("pal_total_owned_cnt", {
+                  cnt: pals?.length || "- -",
+                })}
               </div>
             </>
           )}
@@ -135,7 +133,7 @@ export default function Component(props: any) {
             columns={[
               {
                 dataIndex: "nick_name",
-                title: "Name",
+                title: i18n("name_col"),
                 fixed: true,
                 width: 150,
                 sorter: (a, b) => a.level - b.level,
@@ -143,56 +141,49 @@ export default function Component(props: any) {
               },
               {
                 dataIndex: "craft_speed",
-                title: "Craft Speed",
+                title: i18n("craft_speed_col"),
                 width: 100,
                 render: (data) => formatNumber(data || 0) || "- -",
                 sorter: (a, b) => (a.craft_speed || 0) - (b.craft_speed || 0),
               },
               {
                 dataIndex: "max_hp",
-                title: "Max HP",
+                title: i18n("hp"),
                 width: 100,
                 render: (data) => formatNumber((data || 0) / 1000.0) || "- -",
                 sorter: (a, b) => a.max_hp - b.max_hp,
               },
               {
                 dataIndex: "talent_hp",
-                title: "Talendt HP",
+                title: i18n("talent_hp_col"),
                 width: 100,
                 render: (data) => formatNumber(data || 0) || "- -",
                 sorter: (a, b) => a.talent_hp - b.talent_hp,
               },
               {
                 dataIndex: "talent_melee",
-                title: "Talent Melee",
+                title: i18n("talent_melee_col"),
                 width: 100,
                 render: (data) => formatNumber(data || 0) || "- -",
                 sorter: (a, b) => a.talent_melee - b.talent_melee,
               },
               {
                 dataIndex: "talent_shot",
-                title: "Talent Shot",
+                title: i18n("talent_shot_col"),
                 width: 100,
                 render: (data) => formatNumber(data || 0) || "- -",
                 sorter: (a, b) => a.talent_shot - b.talent_shot,
               },
               {
                 dataIndex: "talent_defense",
-                title: "Talent Defense",
+                title: i18n("talent_defense_col"),
                 width: 100,
                 render: (data) => formatNumber(data || 0) || "- -",
                 sorter: (a, b) => a.talent_defense - b.talent_defense,
               },
               {
-                dataIndex: "craft_speed",
-                title: "Craft Speed",
-                width: 100,
-                render: (data) => formatNumber(data || 0) || "- -",
-                sorter: (a, b) => (a.craft_speed || 0) - (b.craft_speed || 0),
-              },
-              {
                 dataIndex: "passive_skill_list",
-                title: "Labels",
+                title: i18n("passive_skill_list_col"),
                 width: 300,
                 render: (data) => {
                   if (!data) {

@@ -4,6 +4,7 @@ import cx from "classnames";
 import { Typography, Button } from "antd";
 import styles from "./index.module.sass";
 import ExpBar from "../ExpBar";
+import i18n from "@/util/i18n";
 
 const { Paragraph } = Typography;
 
@@ -37,7 +38,7 @@ export default function PlayerInfo(props: Props) {
           </div>
         </div>
         <Button type="link" onClick={onViewGuild}>
-          View his/her Guild
+          {i18n("view_guild")}
         </Button>
       </div>
       <div></div>

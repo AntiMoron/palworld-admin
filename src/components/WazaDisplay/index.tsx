@@ -3,6 +3,7 @@ import cx from "classnames";
 import React from "react";
 import { CheckOutlined } from "@ant-design/icons";
 import styles from "./index.module.sass";
+import i18n from "@/util/i18n";
 
 interface Props {
   className?: string;
@@ -17,16 +18,16 @@ export default function WazaDisplay(props: Props) {
 
   const content = (
     <Tag
-      color={'green'}
+      color={"green"}
       className={cx({ [styles.equiped]: equiped }, className)}
       style={style}
-      icon={<CheckOutlined />}
+      icon={equiped ? <CheckOutlined /> : null}
     >
       {display}
     </Tag>
   );
   if (equiped) {
-    return <Tooltip title="This waza is equiped">{content}</Tooltip>;
+    return <Tooltip title={i18n('waza_tooltip')}>{content}</Tooltip>;
   }
   return content;
 }

@@ -4,12 +4,13 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import sha256 from "sha256";
 import styles from "./index.module.sass";
+import i18n from "@/util/i18n";
 
 export default function Login() {
   const router = useRouter();
   return (
     <div className={styles.border}>
-      <h1 className={styles.h1}>Palworld Admin Panel</h1>
+      <h1 className={styles.h1}>{i18n("palworld_admin_panel")}</h1>
       <Form
         className={styles.form}
         onFinish={(values: any) => {
@@ -42,7 +43,7 @@ export default function Login() {
           <Input type="password" placeholder="admin panel password" />
         </Form.Item>
         <Button type="primary" htmlType="submit">
-          Submit
+          {i18n("login_btn")}
         </Button>
       </Form>
     </div>

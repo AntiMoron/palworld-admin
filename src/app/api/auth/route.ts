@@ -6,8 +6,8 @@ import parseJSON from "@/util/parseJSON";
 // login
 export async function POST(req: NextRequest) {
   try {
-    const value = (await req.body?.getReader().read())?.value?.toString();
-    const { password } = parseJSON(value || "") || {};
+    const value = await req.json();
+    const { password } = value || {};
     const token = await login("admin", password);
     if (!token) {
       log("error", "Failed to login", token);

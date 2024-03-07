@@ -1,5 +1,6 @@
 "use client";
 
+import i18n from "@/util/i18n";
 import { Button, Form, Input, Modal } from "antd";
 import { useForm } from "antd/es/form/Form";
 import React, { useState } from "react";
@@ -15,11 +16,11 @@ export default function BroadCast() {
           setShowModal(true);
         }}
       >
-        Broadcast
+        {i18n("system_broadcast_btn")}
       </Button>
       <Modal
         open={showModal}
-        title="System Broadcast"
+        title={i18n("system_broadcast")}
         footer={null}
         onCancel={() => {
           setShowModal(false);
@@ -54,11 +55,11 @@ export default function BroadCast() {
           }}
         >
           <Form.Item name="message" rules={[{ required: true }]}>
-            <Input placeholder="Your text." />
+            <Input placeholder={i18n("system_broadcast_text")} />
           </Form.Item>
           <Form.Item>
-            <Button htmlType="submit" type="primary">
-              Send
+            <Button htmlType="submit" type="primary" className="text-black">
+              {i18n("send")}
             </Button>
           </Form.Item>
         </Form>
