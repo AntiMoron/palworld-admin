@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export function middleware(req: NextRequest) {
+export function middleware(req: NextRequest, res: NextResponse) {
   const lang = req.nextUrl.searchParams.get("lang");
+  const ret = NextResponse.next();
   if (lang) {
-    req.headers.append("pa_lang", lang);
+    ret.headers.append("x-lang", lang);
   }
-  return NextResponse.next();
+  return ret;
 }
 
 export const config = {

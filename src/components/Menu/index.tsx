@@ -9,13 +9,14 @@ import styles from "./index.module.sass";
 import PalworldVersion from "../PalworldVer";
 import BroadCast from "../Broadcast";
 import Language from "../Language";
-import i18n from "@/util/i18n";
+import i18n, { setLang } from "@/util/i18n";
 import { useSearchParams } from "next/navigation";
 
 export default function Menu() {
   const [open, setOpen] = useState(false);
   const searchParams = useSearchParams();
   const lang = searchParams?.get("lang") || "en";
+  setLang(lang);
   const menu = (
     <div className={cx("flex-1 overflow-auto py-4", styles.menu)}>
       <nav className="grid gap-1">

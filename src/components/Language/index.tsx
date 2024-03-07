@@ -15,21 +15,23 @@ export default function Language(props: Props) {
   const [lang, setLang] = useLocalStorageState<string>("pa_lang", {
     defaultValue: "",
   });
-
   useEffect(() => {
     const url = new URL(window.location.href);
     const searchParams = new URLSearchParams(url.search);
     if (searchParams.has("lang")) {
       setLang(searchParams.get("lang") as string);
+      setSysLang(searchParams.get("lang") as string);
     } else if (lang) {
       // also add url search param to change language
       searchParams.set("lang", lang);
+      setSysLang(lang);
       url.search = searchParams.toString();
       window.history.replaceState({}, "", url.toString());
     } else {
       const browserLang = navigator.language;
       if (!lang) {
         setLang(browserLang);
+        setSysLang(browserLang);
       }
     }
   }, []);
@@ -44,9 +46,17 @@ export default function Language(props: Props) {
       className={cx("", className)}
       onChange={(value) => {
         setLang(value);
+        try {
+          const url = new URL(window.location.href);
+          const searchParams = new URLSearchParams(url.search);
+          searchParams.set("lang", value);
+          setSysLang(value);
+          url.search = searchParams.toString();
+          window.history.replaceState({}, "", url.toString());
+        } catch {}
         setTimeout(() => {
           window.location.reload();
-        }, 500);
+        }, 1000);
       }}
       value={lang}
       options={[

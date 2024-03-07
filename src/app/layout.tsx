@@ -1,3 +1,4 @@
+// "use client";
 import React from "react";
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
@@ -19,7 +20,7 @@ export const viewport: Viewport = {
 export default function Layout(props: any) {
   const { children } = props;
   const hs = headers();
-  const lang = hs.get("pa_lang") || "";
+  const lang = hs.get("x-lang") || "";
   setLang(lang);
   return (
     <html lang={lang}>
