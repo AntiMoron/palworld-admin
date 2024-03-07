@@ -23,8 +23,8 @@ export default function Person(props: Props) {
   } catch {}
   return (
     <div
-      className={cx(styles.container, {
-        [styles.selected]: selected,
+      className={cx(styles.container, "text-black bg-gray-300 border-transparent hover:bg-white hover:border-blue-400", {
+        "bg-white border-blue-400": selected,
       })}
       onClick={onClick}
     >

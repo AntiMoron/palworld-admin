@@ -1,26 +1,52 @@
+"use client";
 import styles from "./layout.module.sass";
-import { ConfigProvider } from "antd";
+import cx from "classnames";
+import { ConfigProvider, theme } from "antd";
 import MotionBackground from "@/components/Motion";
 import Menu from "@/components/Menu";
 import GlobalHeading from "@/components/GlobalHeading";
 import ReturnMark from "@/components/ReturnMark";
+import DarkMode, { ThemeContext } from "@/components/DarkMode";
+import { useCallback, useState } from "react";
 
-export default async function RootLayout({
+const { defaultAlgorithm, darkAlgorithm } = theme;
+
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [isDark, setIsDark] = useState(false);
+  const toggle = useCallback(
+    (val: boolean) => {
+      setIsDark(() => val);
+    },
+    [setIsDark]
+  );
   return (
-    <div className={styles.frame}>
-      <Menu />
-      <MotionBackground />
-      <main className="w-full overflow-y-auto">
-        <div className="container px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
-          <GlobalHeading />
-          <ConfigProvider>{children}</ConfigProvider>
-        </div>
-      </main>
-      <ReturnMark />
-    </div>
+    <ThemeContext.Provider value={{ isDark, toggle }}>
+      <div
+        className={cx(styles.frame, {
+          [styles.dark]: isDark,
+        })}
+      >
+        <Menu />
+        {/* <MotionBackground /> */}
+        <main className="w-full overflow-y-auto">
+          <div className="container px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+            <GlobalHeading />
+            <ConfigProvider
+              theme={{
+                algorithm: isDark ? darkAlgorithm : defaultAlgorithm,
+              }}
+            >
+              {children}
+            </ConfigProvider>
+          </div>
+        </main>
+        <ReturnMark />
+        <DarkMode />
+      </div>
+    </ThemeContext.Provider>
   );
 }

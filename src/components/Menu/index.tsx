@@ -17,14 +17,14 @@ export default function Menu() {
     <div className={cx("flex-1 overflow-auto py-4", styles.menu)}>
       <nav className="grid gap-1">
         <Link
-          className="flex items-center h-10 px-4 rounded-md text-sm font-medium transition-colors hover:bg-gray-100 dark:bg-gray-800 hover:text-gray-900 dark:text-gray-50"
+          className="flex items-center h-10 px-4 rounded-md text-sm font-medium transition-colors bg-transparent text-black hover:bg-gray-100 hover:text-gray-900"
           href="/app/players"
         >
           <MehOutlined className="mr-2 h-4 w-4" />
           Players
         </Link>
         <Link
-          className="flex items-center h-10 px-4 rounded-md text-sm font-medium transition-colors hover:bg-gray-100 dark:bg-gray-800 hover:text-gray-900 dark:text-gray-50"
+          className="flex items-center h-10 px-4 rounded-md text-sm font-medium transition-colors bg-transparent text-black hover:bg-gray-100 hover:text-gray-900"
           href="/app/guilds"
         >
           <TeamOutlined className="mr-2 h-4 w-4" />
@@ -39,7 +39,7 @@ export default function Menu() {
         <div className={styles.lg}>
           <div className="flex h-[60px] items-center">
             <Link
-              className="flex items-center gap-2 text-xl font-semibold px-6"
+              className="flex items-center gap-2 text-xl font-semibold px-6 bg-transparent text-black"
               href="/app/players"
             >
               Palworld Admin Panel
@@ -50,7 +50,7 @@ export default function Menu() {
       </div>
       <Button
         type="link"
-        className={styles.openButton}
+        className={cx("text-black", styles.openButton)}
         onClick={() => {
           setOpen(true);
         }}
@@ -64,6 +64,9 @@ export default function Menu() {
           header: { display: "none" },
           body: {},
           content: { padding: "none", width: "80vw" },
+        }}
+        classNames={{
+          body: "bg-gray-100 text-black",
         }}
         closeIcon={null}
         open={open}

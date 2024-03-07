@@ -25,17 +25,17 @@ export default function Guild(props: Props) {
   }
   return (
     <div
-      className={cx(styles.container, {
-        [styles.selected]: selected,
-      })}
+      className={cx(
+        styles.container,
+        "text-black bg-gray-300 border-transparent hover:bg-white hover:border-blue-400",
+        {
+          "bg-white border-blue-400": selected,
+        }
+      )}
       onClick={onClick}
     >
       <div className={styles.heading}>
-        {groupLevel && (
-          <div className={styles.level}>
-            Lv. {groupLevel}
-          </div>
-        )}
+        {groupLevel && <div className={styles.level}>Lv. {groupLevel}</div>}
         <div className={styles.nick}>{groupName || "- -"}</div>
         {/* {groupType && (
           <Tag className={styles.tag} color="gold">

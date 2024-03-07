@@ -7,6 +7,7 @@ import { Spin, Table, Tag, Typography, Result } from "antd";
 import { Group } from "@/util/group";
 import Guild from "@/components/Guild";
 import { useRouter } from "next/navigation";
+import cx from "classnames";
 
 const { Title, Paragraph } = Typography;
 
@@ -18,7 +19,7 @@ export default function Component(props: any) {
   const [players, setPlayers] = useState<Player[] | undefined>();
   const [curGroup, setCurGroup] = useState<undefined | Group>();
   useEffect(() => {
-    fetch("/api/group", {
+    fetch(`/api/group?groupId=${guildId || ""}`, {
       method: "GET",
       next: {
         revalidate: 0,
@@ -45,7 +46,7 @@ export default function Component(props: any) {
           setCurGroup(data?.[0]);
         }
       });
-  }, []);
+  }, [guildId]);
   useEffect(() => {
     if (!curGroup) {
       return;
@@ -77,7 +78,11 @@ export default function Component(props: any) {
   return (
     <Spin spinning={!groups} style={{ background: "transparent" }}>
       <Title level={2}> Guilds</Title>
-      <div className={styles.container}>
+      <div
+        className={cx(styles.container, {
+          [styles.playerDetail]: Boolean(guildId),
+        })}
+      >
         <div className={styles.leftPlayers}>
           {groups?.map((group) => {
             const {
@@ -91,6 +96,11 @@ export default function Component(props: any) {
               <Guild
                 selected={curGroup === group}
                 onClick={() => {
+                  const isMobile = window.innerWidth < 640;
+                  if (isMobile) {
+                    router.push(`/app/guilds/${group?.group_id}`);
+                    return;
+                  }
                   setCurGroup(group);
                 }}
                 groupName={guildName}

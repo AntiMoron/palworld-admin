@@ -22,7 +22,6 @@ function getBody(res: Request): Promise<Record<string, string>> {
         return;
       }
       const obj = JSON.parse(data);
-      console.log(obj);
       if (resolve) {
         resolve(obj);
       }

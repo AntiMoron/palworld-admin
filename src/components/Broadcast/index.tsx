@@ -10,6 +10,7 @@ export default function BroadCast() {
   return (
     <>
       <Button
+        className="text-black border-black hover:bg-gray-400"
         onClick={() => {
           setShowModal(true);
         }}

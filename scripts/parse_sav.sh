@@ -12,7 +12,7 @@ rm -rf $output_file
 
 BIN_PATH=/root/py/bin
 
-if [ $DEV = "true" ]; then
+if [ "$DEV" = "true" ]; then
   BIN_PATH=./
 fi
 

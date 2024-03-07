@@ -26,7 +26,13 @@ export default function PalworldVersion(props: Props) {
       });
   }, []);
   return (
-    <div className={cx(`flex-1 ${styles.header}`, className)} style={style}>
+    <div
+      className={cx(
+        `bg-transparent text-black border-black flex-1 ${styles.header}`,
+        className
+      )}
+      style={style}
+    >
       {info?.ver || ""} {info?.name || ""}
     </div>
   );

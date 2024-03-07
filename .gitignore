@@ -11,3 +11,4 @@ build/sync_save
 dist
 pa_config
 sync_save
+tmp_save

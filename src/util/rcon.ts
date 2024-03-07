@@ -13,7 +13,7 @@ export default function sendRcon(
       throw new Error("No RCON_ADMIN_PASSWORD provided");
     }
     const [host, port] = location.split(":");
-    console.log("RCON", { host, port, pwd, cmd, params });
+    // console.log("RCON", { host, port, pwd, cmd, params });
     const conn = new Rcon(host, port, pwd);
     conn
       .on("connect", () => {
@@ -46,7 +46,7 @@ export default function sendRcon(
         }
       });
     conn.on("server", (ret: string) => {
-      console.log("server", ret);
+      // console.log("server", ret);
       if (!resolve) {
         return;
       }
