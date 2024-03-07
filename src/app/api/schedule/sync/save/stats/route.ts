@@ -1,4 +1,5 @@
 import getConfig from "@/util/getConfig";
+import log from "@/util/log";
 import getSyncStats from "@/util/syncStats";
 import { NextRequest } from "next/server";
 
@@ -8,7 +9,7 @@ export function GET(req: NextRequest) {
     // check sync permission
     syncAuth(syncToken || "");
     const stats = getSyncStats();
-    console.log(stats);
+    log("info", stats);
     return Response.json({ stats });
   } catch (error) {
     return Response.json(error, { status: 400 });

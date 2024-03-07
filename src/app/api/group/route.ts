@@ -2,6 +2,7 @@ import { checkAuth } from "@/util/auth";
 import { getGroupByGroupId, getGroups } from "@/util/group";
 import { NextRequest } from "next/server";
 import { RedirectType, redirect } from "next/navigation";
+import log from "@/util/log";
 
 export async function GET(res: NextRequest) {
   try {
@@ -20,7 +21,7 @@ export async function GET(res: NextRequest) {
     const groups = await getGroups();
     return Response.json(groups);
   } catch (err) {
-    console.log(err);
+    log("error", err);
     return Response.json(
       { error: (err as any)?.message },
       {

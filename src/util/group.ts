@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
 import getClient from "./getDbClient";
 import omit from "lodash/omit";
+import log from "./log";
 
 export interface Group {
   id: number;
@@ -46,7 +47,7 @@ export async function saveGroup(group: Omit<Group, "id">) {
     const sql = client("game_group").insert(
       omit(group, ["individual_character_handle_ids", "players"])
     );
-    console.log(sql.toQuery());
+    log("debug", sql.toQuery());
     await sql;
   }
 }

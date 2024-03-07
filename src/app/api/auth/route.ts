@@ -1,5 +1,6 @@
 import { login } from "@/util/auth";
 import { NextRequest } from "next/server";
+import log from "@/util/log";
 
 // login
 export async function POST(req: NextRequest) {
@@ -10,6 +11,7 @@ export async function POST(req: NextRequest) {
       ) || {};
     const token = await login("admin", password);
     if (!token) {
+      log("error", "Failed to login", token);
       return Response.json(
         { error: "Failed to login" },
         {
@@ -27,6 +29,7 @@ export async function POST(req: NextRequest) {
       }
     );
   } catch (err) {
-    return Response.json(err, { status: 401 });
+    log("error", err);
+    return Response.json({ error: (err as any)?.message }, { status: 401 });
   }
 }

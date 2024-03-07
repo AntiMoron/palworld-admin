@@ -1,6 +1,7 @@
 import { isNil, pick } from "lodash";
 import getClient from "./getDbClient";
 import omit from "lodash/omit";
+import log from "./log";
 
 export interface Player {
   id: number;
@@ -192,6 +193,6 @@ export function handleRawSavedPlayer(player: any): Player {
   if (handled.character_id) {
     handled.nick_name = handled.nick_name || handled.character_id;
   }
-  console.log(handled);
+  log("debug", handled);
   return handled;
 }

@@ -1,20 +1,21 @@
 import { exec } from "child_process";
+import log from "./log";
 
 export default function runBash(bashCommand: string) {
   return new Promise<string>((res, rej) => {
-    console.log("executing: ", bashCommand);
+    log("info", "executing: ", bashCommand);
     exec(bashCommand, (error, stdout, stderr) => {
       if (error) {
-        console.error(`Error: ${error.message}`);
+        log("error", `Error: ${error.message}`);
         rej(stderr);
         return;
       }
       if (stderr) {
-        console.error(`stderr: ${stderr}`);
+        log("error", `stderr: ${stderr}`);
         rej(stderr);
         return;
       }
-      console.log(`stdout: ${stdout}`);
+      log("info", `stdout: ${stdout}`);
       res(stdout);
     });
   });

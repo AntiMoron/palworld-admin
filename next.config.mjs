@@ -10,6 +10,8 @@ const nextConfig = {
       "knex",
       "sha256",
       "jwt",
+      "dayjs",
+      "chalk",
     ],
   },
 };

@@ -1,6 +1,7 @@
 import getConfig from "./getConfig";
 import getClient from "./getDbClient";
 import jwt from "jsonwebtoken";
+import log from "@/util/log";
 
 interface User {
   id: number;
@@ -21,7 +22,7 @@ export async function checkAuth(token: string) {
   }
   const ret = jwt.verify(token, secret);
   if (!ret) {
-    console.log(ret);
+    log("error", ret);
     throw new Error("Not logined");
   }
   const userJwt = token;
@@ -40,7 +41,9 @@ export async function login(username: string, password: string) {
     throw new Error("User not found");
   }
   if (password === user.password) {
+    log("info", "password correct");
     const token = jwt.sign({ username }, secret, { expiresIn: "1h" });
+    log("info", token);
     await db("user")
       .update({
         cur_jwt: token,

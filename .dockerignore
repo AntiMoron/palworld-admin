@@ -2,3 +2,4 @@ node_modules
 .next
 sync.cron
 .git/
+tmp_save/

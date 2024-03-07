@@ -9,16 +9,17 @@ import dayjs from "dayjs";
 import { syncAuth } from "@/util/auth";
 import { NextRequest } from "next/server";
 import getSyncStats, { SyncStats } from "@/util/syncStats";
+import { log } from "console";
 
 export async function POST(req: NextRequest) {
   try {
-    console.log("triggered SaveFile: Level.sav sync");
+    log("info", "triggered SaveFile: Level.sav sync");
     const config = getConfig();
     const fileDir = config.SAVE_FILE_DIR || "";
     const syncToken = req.headers.get("__sync_token");
     // check sync permission
     syncAuth(syncToken || "");
-    console.log("SAVE_FILE_DIR", config.SAVE_FILE_DIR);
+    log("info", "SAVE_FILE_DIR", config.SAVE_FILE_DIR);
     if (!fileDir) {
       throw new Error("SAVE_FILE_DIR is not set");
     }
@@ -27,13 +28,13 @@ export async function POST(req: NextRequest) {
     );
     const filename = files.split("\n")?.[0];
     const fileUtc = getFileUtcTimeStamp(filename);
-    console.log("start to read " + filename);
+    log("info", "start to read " + filename);
     const status = getSyncStats();
     if (status === SyncStats.SYNCING) {
       throw new Error("Last sync not finished yet.");
     }
     const data = await fetchSavedFile(filename);
-    console.log("finish to read");
+    log("info", "finish reading");
     const {
       pals,
       playerInstanceIdMap,
@@ -50,10 +51,11 @@ export async function POST(req: NextRequest) {
         acc[cur.player_uid || ""] = cur.last_online_real_time;
         return acc;
       }, {} as any);
-    console.log("playerLoginTimes", JSON.stringify(playerLoginTimes));
+    log("debug", "playerLoginTimes", JSON.stringify(playerLoginTimes));
     // sync players
     for (const player of players) {
-      console.log(
+      log(
+        "debug",
         player,
         convTime(
           playerLoginTimes[player.playerUid]?.last_online_real_time || 0,
@@ -74,7 +76,7 @@ export async function POST(req: NextRequest) {
           })
         );
       } catch (err) {
-        console.log("saveplayer error: ", err);
+        log("error", "saveplayer error: ", err);
       }
     }
 
@@ -88,7 +90,7 @@ export async function POST(req: NextRequest) {
           })
         );
       } catch (err) {
-        console.log("savepals error: ", err);
+        log("error", "savepals error: ", err);
       }
     }
     // sync guilds
@@ -104,12 +106,12 @@ export async function POST(req: NextRequest) {
           await saveGroupRelation(instance_id, group_id);
         }
       } catch (err) {
-        console.log("savegroup error: ", err);
+        log("error", "savegroup error: ", err);
       }
     }
     return Response.json({ OK: true });
   } catch (err) {
-    console.log(err);
+    log("error", err);
     return Response.json(
       {
         error: (err as Error)?.message || err,
