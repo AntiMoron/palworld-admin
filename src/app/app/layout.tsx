@@ -8,6 +8,7 @@ import GlobalHeading from "@/components/GlobalHeading";
 import ReturnMark from "@/components/ReturnMark";
 import DarkMode, { ThemeContext } from "@/components/DarkMode";
 import { useCallback, useState } from "react";
+import { useLocalStorageState } from "ahooks";
 
 const { defaultAlgorithm, darkAlgorithm } = theme;
 
@@ -16,7 +17,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [isDark, setIsDark] = useState(false);
+  const [isDark = false, setIsDark] = useLocalStorageState<boolean>("theme_is_dark", {
+    defaultValue: false,
+  });
   const toggle = useCallback(
     (val: boolean) => {
       setIsDark(() => val);
