@@ -1,14 +1,13 @@
 import { login } from "@/util/auth";
 import { NextRequest } from "next/server";
 import log from "@/util/log";
+import parseJSON from "@/util/parseJSON";
 
 // login
 export async function POST(req: NextRequest) {
   try {
-    const { password } =
-      JSON.parse(
-        (await req.body?.getReader()?.read())?.value?.toString() || ""
-      ) || {};
+    const value = (await req.body?.getReader().read())?.value?.toString();
+    const { password } = parseJSON(value || "") || {};
     const token = await login("admin", password);
     if (!token) {
       log("error", "Failed to login", token);
