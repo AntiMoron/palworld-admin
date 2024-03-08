@@ -4,12 +4,18 @@ import jp from "@/locale/jp";
 import cnPal from "@/locale/pal_name/cn";
 import enPal from "@/locale/pal_name/en";
 import jpPal from "@/locale/pal_name/jp";
+import cnSkill from "@/locale/pal_skill/cn";
+import enSkill from "@/locale/pal_skill/en";
+import jpSkill from "@/locale/pal_skill/en";
+import cnLabel from "@/locale/label/cn";
+import enLabel from "@/locale/label/en";
+import jpLabel from "@/locale/label/jp";
 import get from "lodash/get";
 
 const m: any = {
-  cn: { ...cn, pal: cnPal },
-  en: { ...en, pal: enPal },
-  jp: { ...jp, pal: jpPal },
+  en: { ...en, pal: enPal, skill: enSkill, label: enLabel },
+  cn: { ...cn, pal: cnPal, skill: cnSkill, label: cnLabel },
+  jp: { ...jp, pal: jpPal, skill: jpSkill, label: jpLabel },
 };
 
 let _lang = "en";
