@@ -3,7 +3,7 @@ import en from "@/locale/en";
 import jp from "@/locale/jp";
 import cnPal from "@/locale/pal_name/cn";
 import enPal from "@/locale/pal_name/en";
-import jpPal from "@/locale/pal_name/en";
+import jpPal from "@/locale/pal_name/jp";
 import get from "lodash/get";
 
 const m: any = {
