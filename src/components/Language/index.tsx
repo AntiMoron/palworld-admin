@@ -60,9 +60,9 @@ export default function Language(props: Props) {
       }}
       value={lang}
       options={[
-        { label: "English", value: "en", title: "English" },
-        { label: "日本語", value: "ja", title: "日本語" },
-        { label: "简体中文", value: "zh", title: "简体中文" },
+        { label: "English", value: "en-US", title: "English" },
+        { label: "日本語", value: "ja-JP", title: "日本語" },
+        { label: "简体中文", value: "zh-CN", title: "简体中文" },
       ]}
     ></Select>
   );

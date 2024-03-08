@@ -9,8 +9,9 @@ interface Props {
 
 export default function PalAvatar(props: Props) {
   const { character } = props;
-  const isBoss = character?.match(/BOSS_/);
-  const originName = character?.replace(/BOSS_/g, "");
+  const bs = /[Bb][Oo][Ss][Ss]_/;
+  const isBoss = character?.match(bs);
+  const originName = character?.replace(bs, "");
   const localUrl = `/pal/T_${originName}_icon_normal.png`;
   return (
     <Tooltip title={isBoss ? "This Pal is an Alpha Pal" : ""}>

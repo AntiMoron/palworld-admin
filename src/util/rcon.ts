@@ -69,7 +69,7 @@ export default function sendRcon(
           const keys = tableKeys.split(",").map((a) => a.trim());
           console.log(keys, rows);
           resolve(rows);
-          break;
+          break
         case "Broadcast":
           resolve(ret);
           break;

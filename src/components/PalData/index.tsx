@@ -5,6 +5,8 @@ import { Player } from "@/util/player";
 import styles from "./index.module.sass";
 import ExpBar from "../ExpBar";
 import formatNumber from "@/util/formatNumber";
+import i18n from "@/util/i18n";
+import charNoMap from "./charNoMap";
 
 interface Props extends Player {
   className?: string;
@@ -60,7 +62,18 @@ export default function PalData(props: Props) {
       acc[type] = +value || 0;
       return acc;
     }, {} as Record<string, number>);
+  const isAlphaBoss = nickname?.match(/[Bb][Oo][Ss][Ss]_/);
+  const nickname2 = isAlphaBoss ? nickname?.replace("BOSS_", "") : nickname;
+  const isSpecialName = nickname !== character_id;
   const isFemail = gender === "Female";
+  console.log(character_id);
+  let palName = i18n(
+    `pal.[${charNoMap[character_id?.replace(/[Bb][Oo][Ss][Ss]_/, "")] || -1}]`
+  );
+  if (palName.indexOf("-1") >= 0) {
+    palName = character_id.replace(/[Bb][Oo][Ss][Ss]_/, "");
+  }
+  const displayName = isSpecialName ? nickname2 : palName;
   return (
     <div
       className={cx(
@@ -77,7 +90,7 @@ export default function PalData(props: Props) {
         <div className={cx(styles.gender, { [styles.fem]: isFemail })}>
           {isFemail ? "♀" : "♂"}
         </div>
-        <span className={styles.name}>{nickname?.replace("BOSS_", "")}</span>
+        <span className={styles.name}>{displayName}</span>
       </div>
       <div className={styles.exp}>
         <ExpBar exp={exp} />

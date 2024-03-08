@@ -1,8 +1,17 @@
 import cn from "@/locale/cn";
 import en from "@/locale/en";
 import jp from "@/locale/jp";
+import cnPal from "@/locale/pal_name/cn";
+import enPal from "@/locale/pal_name/en";
+import jpPal from "@/locale/pal_name/en";
+import get from "lodash/get";
 
-const m: any = { cn, en, jp };
+const m: any = {
+  cn: { ...cn, pal: cnPal },
+  en: { ...en, pal: enPal },
+  jp: { ...jp, pal: jpPal },
+};
+
 let _lang = "en";
 let _dict = m[_lang];
 
@@ -42,7 +51,7 @@ export default function i18n(
   key: string,
   values?: Record<string, string | number | boolean>
 ): string {
-  const pattern = _dict[key];
+  const pattern = get(_dict, key);
   if (!pattern) {
     return key;
   }
