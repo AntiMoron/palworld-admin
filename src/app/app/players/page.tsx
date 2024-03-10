@@ -4,7 +4,16 @@ import React, { useCallback, useEffect, useState } from "react";
 import styles from "./index.module.sass";
 import Person from "@/components/Person";
 import { Player } from "@/util/player";
-import { Button, Result, Spin, Table, Tag, Typography } from "antd";
+import {
+  Button,
+  Result,
+  Spin,
+  Table,
+  Card,
+  Typography,
+  Progress,
+  Drawer,
+} from "antd";
 import PalFeature from "@/components/PalFeature";
 import PlayerInfo from "@/components/PlayerInfo";
 import cx from "classnames";
@@ -13,6 +22,7 @@ import formatNumber from "@/util/formatNumber";
 import PalData from "@/components/PalData";
 import ReturnMark from "@/components/ReturnMark";
 import i18n, { getLang } from "@/util/i18n";
+import PalWiki from "@/components/PalWiki";
 
 const { Title, Paragraph } = Typography;
 
@@ -23,6 +33,7 @@ export default function Component(props: any) {
   const [players, setPlayers] = useState<undefined | Player[]>(undefined);
   const [pals, setPals] = useState<undefined | Player[]>(undefined);
   const [curPlayer, setCurPlayer] = useState<undefined | Player>();
+  const [openWiki, setOpenWiki] = useState(false);
   const router = useRouter();
   const getPlayers = useCallback(() => {
     fetch("/api/players?isPlayer=true", {
@@ -76,6 +87,7 @@ export default function Component(props: any) {
   if (Array.isArray(players) && players.length === 0) {
     return <Result title={i18n("no_player")} subTitle={i18n("wait_sync")} />;
   }
+  const unlockedCount = new Set(pals?.map((pal) => pal.character_id)).size;
   return (
     <Spin spinning={!players} style={{ background: "transparent" }}>
       <Title level={2}>{i18n("player_title")}</Title>
@@ -108,13 +120,41 @@ export default function Component(props: any) {
           })}
         </div>
         <div className={styles.right}>
+          {playerUid && (
+            <div
+              onClick={() => {
+                setOpenWiki(true);
+              }}
+              className={cx(
+                "p-2 text-black border-2 shadow rounded-xl mb-4 bg-gray-100 border-indigo-500/100"
+              )}
+            >
+              <div className="text-lg text-black font-bold">
+                {i18n("unlock_stats")}
+              </div>
+              <div className={styles.unlockInfo}>
+                <div className="text-sm text-gray-600">
+                  {i18n("unlock_cnt", { value: unlockedCount })}
+                </div>
+                <div className="text-sm text-gray-600">
+                  {" "}
+                  {i18n("lock_cnt", { value: 147 - unlockedCount })}
+                </div>
+                <Progress
+                  type="circle"
+                  percent={Math.round((100 * unlockedCount) / 147)}
+                  size={80}
+                />
+              </div>
+            </div>
+          )}
           {curPlayer && (
             <>
               <PlayerInfo
                 onAction={() => {
                   getPlayers();
                 }}
-                className={styles.playerInfo}
+                className={cx("mb-4", styles.playerInfo)}
                 {...curPlayer}
                 onViewGuild={() => {
                   router.push(
@@ -225,6 +265,14 @@ export default function Component(props: any) {
             }}
           />
         </div>
+        <Drawer
+          open={openWiki}
+          onClose={() => {
+            setOpenWiki(false);
+          }}
+        >
+          <PalWiki curPals={pals} />
+        </Drawer>
       </div>
     </Spin>
   );

@@ -31,7 +31,7 @@ export async function checkAuth(token: string, needRole?: string) {
   if (userJwt !== validJwt) {
     throw new Error("Not logined");
   }
-  if (needRole !== user.role) {
+  if (needRole && needRole !== user.role) {
     throw new Error("You are not allowed to do this");
   }
 }

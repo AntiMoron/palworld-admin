@@ -1,7 +1,6 @@
 // https://wiki.biligame.com/palworld/%E5%B8%95%E9%B2%81%E5%9B%BE%E9%89%B4
 const data: Record<string, string> = {
   Sheepball: "1",
-  SheepBall: "1",
   PinkCat: "2",
   ChickenPal: "3",
   Carbunclo: "4",
@@ -79,8 +78,6 @@ const data: Record<string, string> = {
   LittleBriarRose: "30",
   IceDeer: "59",
   Deer_Ground: "37B",
-  Hunter_Handgun: "",
-  Hunter_Bat: "",
   BirdDragon: "71",
   SakuraSaurus: "86",
   Ronin: "72",
@@ -110,7 +107,7 @@ const data: Record<string, string> = {
   LazyDragon: "85",
   CatVampire: "94",
   LizardMan_Fire: "45",
-  Manticore_Dark: "84",
+  Manticore_Dark: "84B",
   Kelpie_Fire: "81B",
   Suzaku_Water: "102B",
   Serpent_Ground: "65B",
@@ -128,9 +125,6 @@ const data: Record<string, string> = {
   FengyunDeeper: "93",
   SakuraSaurus_Water: "86B",
   GrassPanda_Electric: "33B",
-  PalDealer_Volcano: "",
-  SalesPerson_Volcano2: "",
-  SalesPerson_Volcano: "",
   SharkKid_Fire: "31B",
   Baphomet_Dark: "40B",
   WhiteTiger: "83",
@@ -139,7 +133,6 @@ const data: Record<string, string> = {
   BlackMetalDragon: "98",
   DarkScorpion: "99",
   Horus: "105",
-  Male_DarkTrader01: "",
   LilyQueen_Dark: "104B",
   FireKirin: "58",
   Police_Handgun: "",
@@ -147,6 +140,13 @@ const data: Record<string, string> = {
   BlackCentaur: "109",
   IceHorse: "110",
   JetDragon: "111",
+  Male_DarkTrader01: "",
+  PalDealer_Volcano: "",
+  SalesPerson_Volcano2: "",
+  SalesPerson_Volcano: "",
+  Hunter_Handgun: "",
+  Hunter_Bat: "",
+  Hunter_Fat_GatlingGun: "",
 };
 
 export default data;

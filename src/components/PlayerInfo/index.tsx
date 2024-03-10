@@ -67,7 +67,7 @@ export default function PlayerInfo(props: Props) {
           <ExpBar exp={exp} />
         </div>
       </div>
-      <Button.Group>
+      <Button.Group className="mb-4">
         <Button onClick={onViewGuild}>{i18n("view_guild")}</Button>
         <Button
           onClick={() => {
@@ -97,7 +97,7 @@ export default function PlayerInfo(props: Props) {
             });
           }}
         >
-          Kick
+          {i18n("kick")}
         </Button>
         <Button
           danger={status !== "blacklist"}
@@ -131,10 +131,9 @@ export default function PlayerInfo(props: Props) {
             });
           }}
         >
-          {status !== "blacklist" ? "Ban" : "Unban"}
+          {status !== "blacklist" ? i18n("ban") : i18n("unban")}
         </Button>
       </Button.Group>
-      <div></div>
     </>
   );
 }

@@ -78,7 +78,7 @@ CREATE TABLE char_group_rel (
   FOREIGN KEY (group_id) REFERENCES game_group(group_id)
 );
 
-insert into \`user\` (\`username\`, \`password\`, \`cur_jwt\`) values ('admin', '$hashed_pwd', Null, 'admin');
+insert into \`user\` (\`username\`, \`password\`, \`cur_jwt\`, \`role\`) values ('admin', '$hashed_pwd', Null, 'admin');
 EOF
 )
 
