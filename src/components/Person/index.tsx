@@ -11,6 +11,7 @@ interface Props {
   online?: boolean;
   lastLoginAt: string;
   selected?: boolean;
+  status?: string;
   onClick?: React.MouseEventHandler;
 }
 
@@ -54,11 +55,7 @@ export default function Person(props: Props) {
           </Tag>
         )}
       </div>
-      {d && (
-        <div className={styles.logintime}>
-          <Tag color="purple">Last Seen At: {d}</Tag>
-        </div>
-      )}
+      {d && <div className={cx('text-gray-500', styles.logintime)}>Last Seen At: {d}</div>}
     </div>
   );
 }
