@@ -1,4 +1,5 @@
 import getBody from "@/util/getBody";
+import getDisplayPlayersUID from "@/util/getDisplayPlayerUID";
 import {
   getPlayerByInstanceId,
   savePlayer,
@@ -20,8 +21,9 @@ export async function POST(res: Request) {
         ok: true,
       });
     } else if (action === "kick") {
-      const { steam_id: steamId } = await getPlayerByInstanceId(instanceId);
-      await sendRcon(`KickPlayer`, { steamId });
+      const { player_uid } = await getPlayerByInstanceId(instanceId);
+      const playerUid = getDisplayPlayersUID(player_uid);
+      await sendRcon(`KickPlayer`, { playerUid });
       return Response.json({
         ok: true,
       });

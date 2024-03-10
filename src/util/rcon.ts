@@ -38,11 +38,9 @@ export default function sendRcon(
           case "TeleportToMe":
           case "KickPlayer":
             {
-              const { steamId } = params || {};
-              conn.send(`${cmd} ${steamId}`);
+              const { playerUid } = params || {};
+              conn.send(`${cmd} ${playerUid}`);
             }
-            const { SteamID } = params || {};
-            conn.send(`${cmd} ${SteamID || ""}`);
             break;
           default:
             conn.send(cmd);
