@@ -29,6 +29,10 @@ export async function getGroupByGroupId(groupId: string) {
     .select()
     .where("group_id", groupId)
     .then((r: Group[]) => r?.[0]);
+  if (!group) {
+    return group;
+  }
+  group.base_ids = (group.base_ids as any as string)?.split(",");
   return group as Group;
 }
 

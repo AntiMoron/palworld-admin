@@ -2,6 +2,8 @@ import fs from "fs";
 import JSONStream from "jsonstream";
 import * as path from "path";
 import runBash from "./script";
+import playerUidToSteamId from "./parseSteamId";
+import log from "./log";
 
 function getWorkTypeValue(craftSpeedsValue: any) {
   if (!craftSpeedsValue) {
@@ -192,7 +194,17 @@ export default function fetchSavedFile(fileDir: string) {
                     } as Character;
                   }
                 );
-                const players = characters.filter((item: any) => item.IsPlayer);
+                const players = characters
+                  .filter((item: any) => item.IsPlayer)
+                  .map((a: any) => {
+                    console.log(a);
+                    try {
+                      a.steam_id = playerUidToSteamId(a.playerUid);
+                    } catch (err) {
+                      log("error", err);
+                    }
+                    return a;
+                  });
                 const pals = characters.filter((item: any) => !item.IsPlayer);
                 const playerInstanceIdMap = players.reduce(
                   (pre: any, cur: Character) => {

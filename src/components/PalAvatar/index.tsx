@@ -16,7 +16,7 @@ export default function PalAvatar(props: Props) {
   return (
     <Tooltip title={isBoss ? "This Pal is an Alpha Pal" : ""}>
       <div className={styles.icon}>
-        <Avatar src={localUrl} />
+        <Avatar src={localUrl} key={localUrl} />
         {isBoss && (
           <img
             className={styles.boss}

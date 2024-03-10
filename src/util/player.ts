@@ -123,9 +123,14 @@ export async function getAllPlayers(filter?: {
   return items as Player[];
 }
 
-export async function savePlayer(player: Omit<Player, "id">) {
+export async function savePlayer(
+  player: Partial<Omit<Player, "id">> & Pick<Player, "player_uid">
+) {
   const client = getClient();
   const old = await getPlayerByPlayerUId(player.player_uid);
+  if (!player.status) {
+    player.status = "normal";
+  }
   if (old) {
     await client("game_character")
       .where("id", old.id)
@@ -133,6 +138,16 @@ export async function savePlayer(player: Omit<Player, "id">) {
   } else {
     await client("game_character").insert(player);
   }
+}
+
+export async function updatePlayerById(player: Partial<Player>) {
+  const client = getClient();
+  if (!player.status) {
+    player.status = "normal";
+  }
+  await client("game_character")
+    .where("id", player.id)
+    .update(omit(player, ["player_uid", "instance_id", "id"]));
 }
 
 export async function getPlayerByInstanceId(instanceId: string) {

@@ -12,6 +12,7 @@ const nextConfig = {
       "jwt",
       "dayjs",
       "chalk",
+      "uuid",
     ],
   },
 };

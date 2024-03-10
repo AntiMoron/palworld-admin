@@ -34,6 +34,13 @@ export default function Menu() {
           <TeamOutlined className="mr-2 h-4 w-4" />
           {i18n("guild_title")}
         </Link>
+        <Link
+          className="flex items-center h-10 px-4 rounded-md text-sm font-medium transition-colors bg-transparent text-black hover:bg-gray-100 hover:text-gray-900"
+          href={`/app/blacklist?lang=${lang}`}
+        >
+          <TeamOutlined className="mr-2 h-4 w-4" />
+          {i18n("blacklist_title")}
+        </Link>
       </nav>
     </div>
   );

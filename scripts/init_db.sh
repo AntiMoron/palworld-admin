@@ -61,6 +61,13 @@ CREATE TABLE game_group (
   admin_player_uid TEXT NOT NULL
 );
 
+CREATE TABLE game_camp_info (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  camp_name TEXT,
+  camp_level INTEGER,
+  base_id TEXT NOT NULL UNIQUE
+);
+
 CREATE TABLE char_group_rel (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   instance_id INTEGER NOT NULL,

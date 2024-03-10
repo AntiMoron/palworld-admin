@@ -10,6 +10,7 @@ const dict: Record<string, string> = {
   login_btn: "登录",
   player_title: "玩家",
   guild_title: "公会",
+  blacklist_title: "黑名单管理",
   pal_total_owned_cnt: "总数 {cnt}",
   name_col: "名称",
   craft_speed_col: "制作速度",

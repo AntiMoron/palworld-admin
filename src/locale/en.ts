@@ -10,6 +10,7 @@ const dict: Record<string, string> = {
   login_btn: "Login",
   player_title: "Players",
   guild_title: "Guilds",
+  blacklist_title: "Blacklist",
   pal_total_owned_cnt: "Total {cnt}",
   name_col: "Name",
   craft_speed_col: "Craft Speed",

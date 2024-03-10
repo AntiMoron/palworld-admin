@@ -9,6 +9,7 @@ import Guild from "@/components/Guild";
 import { useRouter } from "next/navigation";
 import cx from "classnames";
 import i18n, { getLang } from "@/util/i18n";
+import GroupBase from "@/components/GroupBase";
 
 const { Title, Paragraph } = Typography;
 
@@ -113,10 +114,15 @@ export default function Component(props: any) {
         </div>
         <div className={styles.right}>
           {curGroup && (
-            <div>
-              <div>{curGroup.guild_name || curGroup.group_name}</div>
-              <Paragraph copyable>{curGroup.group_id}</Paragraph>
-            </div>
+            <>
+              <div>
+                <div>{curGroup.guild_name || curGroup.group_name}</div>
+                <Paragraph copyable>{curGroup.group_id}</Paragraph>
+              </div>
+              <div>
+                <GroupBase base_ids={curGroup?.base_ids} />
+              </div>
+            </>
           )}
           <Table
             dataSource={players}

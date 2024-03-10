@@ -7,6 +7,7 @@ import ExpBar from "../ExpBar";
 import formatNumber from "@/util/formatNumber";
 import i18n from "@/util/i18n";
 import charNoMap from "./charNoMap";
+import Level from "../Level";
 
 interface Props extends Player {
   className?: string;
@@ -86,7 +87,7 @@ export default function PalData(props: Props) {
     >
       <div className={styles.basic}>
         <PalAvatar name={nickname} character={character_id} />
-        <div className={styles.lv}>Lv. {level}</div>
+        <Level className={styles.lv} level={level}></Level>
         <div className={cx(styles.gender, { [styles.fem]: isFemail })}>
           {isFemail ? "♀" : "♂"}
         </div>

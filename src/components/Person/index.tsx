@@ -3,6 +3,7 @@ import { Badge, Tag } from "antd";
 import cx from "classnames";
 import styles from "./index.module.sass";
 import dayjs from "dayjs";
+import Level from "../Level";
 
 interface Props {
   nick_name: string;
@@ -14,7 +15,7 @@ interface Props {
 }
 
 export default function Person(props: Props) {
-  const { onClick, selected, nick_name, level, online, lastLoginAt } = props;
+  const { onClick, selected, nick_name, level = 0, online, lastLoginAt } = props;
 
   let d = "";
   try {
@@ -28,9 +29,9 @@ export default function Person(props: Props) {
       })}
       onClick={onClick}
     >
-      <div className={styles.heading}>
-        <div className={styles.lv} color="gold">
-          lv. {level || "0"}
+      <div className={styles.heading}>        
+        <div className={styles.lv}>
+          <Level level={+level} />
         </div>
         <div className={styles.nick}>{nick_name}</div>
         {online && (

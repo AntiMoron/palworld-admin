@@ -12,7 +12,6 @@ export default function log(level: "info" | "error" | "debug", ...args: any[]) {
     return;
   }
   const PREFIX = `[${level} <${dayjs().format("MMM-DD HH:mm:ss")}>] `;
-  console.log(PREFIX, ...args);
   const color = colors[level] as any;
   if (color) {
     console.log(color?.(PREFIX, ...args));

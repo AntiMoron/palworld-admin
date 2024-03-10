@@ -19,6 +19,7 @@ export default function Login() {
             return;
           }
           const { password } = values;
+          setLoading(true);
           fetch("/api/auth", {
             method: "POST",
             body: JSON.stringify({
@@ -35,6 +36,9 @@ export default function Login() {
                 return;
               }
               router.replace("/app/players");
+            })
+            .finally(() => {
+              setLoading(false);
             });
         }}
         layout="vertical"

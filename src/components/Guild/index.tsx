@@ -1,8 +1,7 @@
 import React from "react";
-import { Badge, Tag } from "antd";
 import cx from "classnames";
 import styles from "./index.module.sass";
-import dayjs from "dayjs";
+import Level from "../Level";
 
 interface Props {
   selected?: boolean;
@@ -35,7 +34,7 @@ export default function Guild(props: Props) {
       onClick={onClick}
     >
       <div className={styles.heading}>
-        {groupLevel && <div className={styles.level}>Lv. {groupLevel}</div>}
+        {groupLevel && <Level className={styles.level} level={groupLevel} />}
         <div className={styles.nick}>{groupName || "- -"}</div>
         {/* {groupType && (
           <Tag className={styles.tag} color="gold">
