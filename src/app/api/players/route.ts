@@ -1,5 +1,6 @@
 import { checkAuth } from "@/util/auth";
 import { getAllPlayers } from "@/util/player";
+import { isNil } from "lodash";
 import { RedirectType, redirect } from "next/navigation";
 import { NextRequest } from "next/server";
 
@@ -21,9 +22,11 @@ export async function GET(res: NextRequest) {
     const ownerId = params.get("ownerId") || undefined;
     const playerUid = params.get("playerUid") || undefined;
     const instanceId = params.get("instanceId") || undefined;
-    const isPlayer =
-      params.get("isPlayer") === "true" ||
-      (params.get("isPlayer") === "false" && false);
+    const status = params.get("status") || undefined;
+    const isPlayer = isNil(params.get("isPlayer"))
+      ? undefined
+      : params.get("isPlayer") === "true" ||
+        (params.get("isPlayer") === "false" && false);
     return Response.json(
       await getAllPlayers({
         ownerId,
@@ -31,6 +34,7 @@ export async function GET(res: NextRequest) {
         order_by: orderBy as any,
         isPlayer,
         order,
+        status,
         playerUid,
         instanceId,
       })

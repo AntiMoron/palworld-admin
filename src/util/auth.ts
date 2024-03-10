@@ -8,11 +8,12 @@ interface User {
   username: string;
   password: string;
   cur_jwt?: string;
+  role: string;
 }
 
 const secret = "palworld-admin-panel";
 
-export async function checkAuth(token: string) {
+export async function checkAuth(token: string, needRole?: string) {
   const db = getClient();
   const user = (
     await db("user").select().where("username", "admin")
@@ -29,6 +30,9 @@ export async function checkAuth(token: string) {
   const validJwt = user.cur_jwt;
   if (userJwt !== validJwt) {
     throw new Error("Not logined");
+  }
+  if (needRole !== user.role) {
+    throw new Error("You are not allowed to do this");
   }
 }
 

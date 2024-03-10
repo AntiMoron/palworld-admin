@@ -12,7 +12,8 @@ CREATE TABLE user (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   username TEXT NOT NULL UNIQUE,
   password TEXT NOT NULL,
-  cur_jwt TEXT
+  cur_jwt TEXT,
+  role TEXT
 );
 
 CREATE TABLE game_character (
@@ -77,7 +78,7 @@ CREATE TABLE char_group_rel (
   FOREIGN KEY (group_id) REFERENCES game_group(group_id)
 );
 
-insert into \`user\` (\`username\`, \`password\`, \`cur_jwt\`) values ('admin', '$hashed_pwd', Null);
+insert into \`user\` (\`username\`, \`password\`, \`cur_jwt\`) values ('admin', '$hashed_pwd', Null, 'admin');
 EOF
 )
 

@@ -48,6 +48,7 @@ export async function getAllPlayers(filter?: {
   order_by?: "level" | "id" | "last_login_at";
   groupId?: string;
   isPlayer?: boolean;
+  status?: string;
   instanceId?: string;
   playerUid?: string;
 }) {
@@ -99,6 +100,7 @@ export async function getAllPlayers(filter?: {
       ownerId,
       playerUid,
       instanceId,
+      status,
     } = filter;
     if (order_by) {
       sql.orderBy(order_by, order || "desc");
@@ -117,6 +119,9 @@ export async function getAllPlayers(filter?: {
     }
     if (playerUid) {
       sql.where("game_character.player_uid", playerUid);
+    }
+    if (status) {
+      sql.where("game_character.status", status);
     }
   }
   const items = await sql;

@@ -194,18 +194,17 @@ export default function fetchSavedFile(fileDir: string) {
                     } as Character;
                   }
                 );
-                const players = characters
-                  .filter((item: any) => item.IsPlayer)
-                  .map((a: any) => {
-                    // console.log(a);
-                    try {
-                      a.steam_id = playerUidToSteamId(a.playerUid);
-                      console.log(a.steam_id);
-                    } catch (err) {
-                      log("error", err);
-                    }
-                    return a;
-                  });
+                const players = characters.filter((item: any) => item.IsPlayer);
+                // .map((a: any) => {
+                //   // console.log(a);
+                //   try {
+                //     a.steam_id = playerUidToSteamId(a.playerUid);
+                //     console.log(a.steam_id);
+                //   } catch (err) {
+                //     log("error", err);
+                //   }
+                //   return a;
+                // });
                 const pals = characters.filter((item: any) => !item.IsPlayer);
                 const playerInstanceIdMap = players.reduce(
                   (pre: any, cur: Character) => {

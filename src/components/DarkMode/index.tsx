@@ -24,9 +24,11 @@ export default function DarkMode() {
       }
     }
     if (isDark) {
+      document.body.style.backgroundColor = "#000";
       document.body.classList.add("nightwind");
       document.body.classList.add("dark");
     } else {
+      document.body.style.backgroundColor = "#fff";
       document.body.classList.remove("nightwind");
       document.body.classList.remove("dark");
       

@@ -67,7 +67,6 @@ export default function PalData(props: Props) {
   const nickname2 = isAlphaBoss ? nickname?.replace("BOSS_", "") : nickname;
   const isSpecialName = nickname !== character_id;
   const isFemail = gender === "Female";
-  console.log(character_id);
   let palName = i18n(
     `pal.[${charNoMap[character_id?.replace(/[Bb][Oo][Ss][Ss]_/, "")] || -1}]`
   );

@@ -2,7 +2,13 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { MehOutlined, TeamOutlined, MenuOutlined } from "@ant-design/icons";
+import {
+  MehOutlined,
+  TeamOutlined,
+  MenuOutlined,
+  ClusterOutlined,
+  AudioMutedOutlined,
+} from "@ant-design/icons";
 import { Button, Drawer } from "antd";
 import cx from "classnames";
 import styles from "./index.module.sass";
@@ -38,8 +44,15 @@ export default function Menu() {
           className="flex items-center h-10 px-4 rounded-md text-sm font-medium transition-colors bg-transparent text-black hover:bg-gray-100 hover:text-gray-900"
           href={`/app/blacklist?lang=${lang}`}
         >
-          <TeamOutlined className="mr-2 h-4 w-4" />
+          <AudioMutedOutlined className="mr-2 h-4 w-4" />
           {i18n("blacklist_title")}
+        </Link>
+        <Link
+          className="flex items-center h-10 px-4 rounded-md text-sm font-medium transition-colors bg-transparent text-black hover:bg-gray-100 hover:text-gray-900"
+          href={`/app/server?lang=${lang}`}
+        >
+          <ClusterOutlined className="mr-2 h-4 w-4" />
+          {i18n("server_title")}
         </Link>
       </nav>
     </div>

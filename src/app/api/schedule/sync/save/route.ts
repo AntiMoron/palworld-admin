@@ -42,7 +42,6 @@ export async function POST(req: NextRequest) {
       players,
       guilds = [],
     } = data;
-    console.log(guilds);
     type PlayerLoginInfo = {
       player_uid: string;
       player_info: { last_online_real_time: number; player_name: string };

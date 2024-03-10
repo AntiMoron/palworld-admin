@@ -1,10 +1,11 @@
 "use client";
-import i18n from "@/util/i18n";
+import i18n, { getLang } from "@/util/i18n";
 import React, { useEffect, useState } from "react";
 import { Spin, Table, Typography } from "antd";
 import { Player } from "@/util/player";
 import PlayerInfo from "@/components/PlayerInfo";
 import Person from "@/components/Person";
+import { useRouter } from "next/navigation";
 
 const { Title } = Typography;
 
@@ -26,17 +27,26 @@ export default function BlackList() {
         setLoading(false);
       });
   }, []);
+  const router = useRouter();
   return (
     <div>
       <Title level={2}>{i18n("blacklist_title")}</Title>
       <div>
         <Table
+          onRow={(record) => ({
+            onClick: () => {
+              router.push(
+                `/app/players/${record?.player_uid}?lang=${getLang()}`
+              );
+            },
+          })}
           columns={[
             {
-              title: "",
+              title: "Player",
               dataIndex: "",
-              render: (data, record) => {
-                return <Person lastLoginAt={""} {...record} />;
+              render: (_, record) => {
+                const { last_login_at: lastLoginAt } = record;
+                return <Person lastLoginAt={lastLoginAt} {...record} />;
               },
             },
           ]}

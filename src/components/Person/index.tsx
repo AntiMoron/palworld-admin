@@ -15,7 +15,15 @@ interface Props {
 }
 
 export default function Person(props: Props) {
-  const { onClick, selected, nick_name, level = 0, online, lastLoginAt } = props;
+  const {
+    onClick,
+    selected,
+    nick_name,
+    level = 0,
+    online,
+    status,
+    lastLoginAt,
+  } = props;
 
   let d = "";
   try {
@@ -24,12 +32,18 @@ export default function Person(props: Props) {
   } catch {}
   return (
     <div
-      className={cx(styles.container, "text-black bg-gray-300 border-transparent hover:bg-white hover:border-blue-400", {
-        "bg-white border-blue-400": selected,
-      })}
+      className={cx(
+        styles.container,
+        { [styles.banned]: status === "blacklist" },
+        { "text-gray-400": status === "blacklist" },
+        "text-black bg-gray-300 border-transparent hover:bg-white hover:border-blue-400",
+        {
+          "bg-white border-blue-400": selected,
+        }
+      )}
       onClick={onClick}
     >
-      <div className={styles.heading}>        
+      <div className={styles.heading}>
         <div className={styles.lv}>
           <Level level={+level} />
         </div>
@@ -41,8 +55,8 @@ export default function Person(props: Props) {
         )}
       </div>
       {d && (
-        <div>
-          <Tag color="purple">{d}</Tag>
+        <div className={styles.logintime}>
+          <Tag color="purple">Last Seen At: {d}</Tag>
         </div>
       )}
     </div>

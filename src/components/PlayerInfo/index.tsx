@@ -14,6 +14,7 @@ interface Props extends Player {
   className?: string;
   style?: React.CSSProperties;
   onViewGuild?: React.MouseEventHandler;
+  onAction?: (action: string) => void;
 }
 
 export default function PlayerInfo(props: Props) {
@@ -23,10 +24,11 @@ export default function PlayerInfo(props: Props) {
     onViewGuild,
     nick_name,
     player_uid,
-    steam_id,
+    status,
     exp,
     level,
     instance_id,
+    onAction,
   } = props;
   return (
     <>
@@ -34,7 +36,19 @@ export default function PlayerInfo(props: Props) {
         <div className={styles.left}>
           <div>
             <Level level={level} />
-            {nick_name}
+            <span
+              className={cx({
+                "text-gray-400": status === "blacklist",
+                [styles.banned]: status === "blacklist",
+              })}
+            >
+              {nick_name}
+            </span>
+            {status === "blacklist" && (
+              <Tag style={{ marginLeft: 4 }} color="red">
+                Banned
+              </Tag>
+            )}
           </div>
           <div className={styles.lower}>
             {player_uid && (
@@ -74,6 +88,7 @@ export default function PlayerInfo(props: Props) {
                 })
                   .then(() => {
                     message.success("Done");
+                    onAction?.("kick");
                   })
                   .catch((err: Error) => {
                     message.error(err?.message);
@@ -85,21 +100,38 @@ export default function PlayerInfo(props: Props) {
           Kick
         </Button>
         <Button
-          danger
+          danger={status !== "blacklist"}
           onClick={() => {
-            fetch(`/api/players/action`, {
-              next: {
-                revalidate: 0,
+            const action = status === "blacklist" ? "unban" : "ban";
+            Modal.confirm({
+              title: status === "blacklist" ? "Unban Player" : "Ban Player",
+              content:
+                status === "blacklist"
+                  ? "you sure you want to unban this player?"
+                  : "you sure you want to ban this player?",
+              onOk: () => {
+                fetch(`/api/players/action`, {
+                  next: {
+                    revalidate: 0,
+                  },
+                  method: "POST",
+                  body: JSON.stringify({
+                    instanceId: instance_id,
+                    action,
+                  }),
+                })
+                  .then(() => {
+                    message.success("Done");
+                    onAction?.(action);
+                  })
+                  .catch((err: Error) => {
+                    message.error(err?.message);
+                  });
               },
-              method: "POST",
-              body: JSON.stringify({
-                instanceId: instance_id,
-                action: "ban",
-              }),
             });
           }}
         >
-          Ban
+          {status !== "blacklist" ? "Ban" : "Unban"}
         </Button>
       </Button.Group>
       <div></div>

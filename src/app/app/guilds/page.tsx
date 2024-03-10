@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./index.module.sass";
 import { Player } from "@/util/player";
-import { Spin, Table, Tag, Typography, Result } from "antd";
+import { Spin, Table, Tag, Typography, Result, Tabs } from "antd";
 import { Group } from "@/util/group";
 import Guild from "@/components/Guild";
 import { useRouter } from "next/navigation";
@@ -83,84 +83,90 @@ export default function Component(props: any) {
           [styles.playerDetail]: Boolean(guildId),
         })}
       >
-        <div className={styles.leftPlayers}>
-          {groups?.map((group) => {
-            const {
-              group_id: groupId,
-              group_type: groupType,
-              group_name: groupName,
-              guild_name: guildName,
-              base_camp_level,
-            } = group;
-            return (
-              <Guild
-                selected={curGroup === group}
-                onClick={() => {
-                  const isMobile = window.innerWidth < 640;
-                  if (isMobile) {
-                    router.push(
-                      `/app/guilds/${group?.group_id}?lang=${getLang()}`
-                    );
-                    return;
-                  }
-                  setCurGroup(group);
+        <Tabs>
+          <Tabs.TabPane key="players" tab="Players" tabKey="players">
+            <div className={styles.leftPlayers}>
+              {groups?.map((group) => {
+                const {
+                  group_id: groupId,
+                  group_type: groupType,
+                  group_name: groupName,
+                  guild_name: guildName,
+                  base_camp_level,
+                } = group;
+                return (
+                  <Guild
+                    selected={curGroup === group}
+                    onClick={() => {
+                      const isMobile = window.innerWidth < 640;
+                      if (isMobile) {
+                        router.push(
+                          `/app/guilds/${group?.group_id}?lang=${getLang()}`
+                        );
+                        return;
+                      }
+                      setCurGroup(group);
+                    }}
+                    groupName={guildName}
+                    groupType={groupType}
+                    groupLevel={base_camp_level}
+                  />
+                );
+              })}
+            </div>
+            <div className={styles.right}>
+              {curGroup && (
+                <>
+                  <div>
+                    <div>{curGroup.guild_name || curGroup.group_name}</div>
+                    <Paragraph copyable>{curGroup.group_id}</Paragraph>
+                  </div>
+                </>
+              )}
+              <Table
+                dataSource={players}
+                loading={loading}
+                pagination={{
+                  pageSize: 50,
+                  showPrevNextJumpers: true,
+                  showQuickJumper: true,
+                  showSizeChanger: true,
+                  total: players?.length,
+                  showLessItems: true,
                 }}
-                groupName={guildName}
-                groupType={groupType}
-                groupLevel={base_camp_level}
+                onRow={(record) => {
+                  return {
+                    onClick: () => {
+                      router.push(
+                        `/app/players/${record.player_uid}?lang=${getLang()}`
+                      );
+                    },
+                  };
+                }}
+                columns={[
+                  {
+                    title: i18n("guild_name"),
+                    dataIndex: "nick_name",
+                  },
+                  {
+                    title: i18n("level"),
+                    dataIndex: "level",
+                    render: (data) => <Tag color="gold">{data}</Tag>,
+                  },
+                  {
+                    title: i18n("player_status"),
+                    dataIndex: "status",
+                  },
+                ]}
               />
-            );
-          })}
-        </div>
-        <div className={styles.right}>
-          {curGroup && (
-            <>
-              <div>
-                <div>{curGroup.guild_name || curGroup.group_name}</div>
-                <Paragraph copyable>{curGroup.group_id}</Paragraph>
-              </div>
-              <div>
-                <GroupBase base_ids={curGroup?.base_ids} />
-              </div>
-            </>
-          )}
-          <Table
-            dataSource={players}
-            loading={loading}
-            pagination={{
-              pageSize: 50,
-              showPrevNextJumpers: true,
-              showQuickJumper: true,
-              showSizeChanger: true,
-              total: players?.length,
-              showLessItems: true,
-            }}
-            onRow={(record) => {
-              return {
-                onClick: () => {
-                  router.push(
-                    `/app/players/${record.player_uid}?lang=${getLang()}`
-                  );
-                },
-              };
-            }}
-            columns={[
-              {
-                title: i18n("guild_name"),
-                dataIndex: "nick_name",
-              },
-              {
-                title: i18n("level"),
-                dataIndex: "level",
-                render: (data) => <Tag color="gold">{data}</Tag>,
-              },
-              {
-                title: i18n("player_status"),
-                dataIndex: "status",
-              },
-            ]}
-          />
-        </div>
+            </div>
+          </Tabs.TabPane>
+          <Tabs.TabPane key="camps" tab="Camp Info" tabKey="camps">
+            <div>
+              <GroupBase base_ids={curGroup?.base_ids} />
+            </div>
+          </Tabs.TabPane>
+        </Tabs>
       </div>
     </Spin>
   );

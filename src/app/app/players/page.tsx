@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styles from "./index.module.sass";
 import Person from "@/components/Person";
 import { Player } from "@/util/player";
@@ -24,7 +24,7 @@ export default function Component(props: any) {
   const [pals, setPals] = useState<undefined | Player[]>(undefined);
   const [curPlayer, setCurPlayer] = useState<undefined | Player>();
   const router = useRouter();
-  useEffect(() => {
+  const getPlayers = useCallback(() => {
     fetch("/api/players?isPlayer=true", {
       next: {
         revalidate: 0,
@@ -44,6 +44,9 @@ export default function Component(props: any) {
           setCurPlayer(data?.[0]);
         }
       });
+  }, []);
+  useEffect(() => {
+    getPlayers();
   }, []);
   useEffect(() => {
     if (!curPlayer) {
@@ -108,6 +111,9 @@ export default function Component(props: any) {
           {curPlayer && (
             <>
               <PlayerInfo
+                onAction={() => {
+                  getPlayers();
+                }}
                 className={styles.playerInfo}
                 {...curPlayer}
                 onViewGuild={() => {
