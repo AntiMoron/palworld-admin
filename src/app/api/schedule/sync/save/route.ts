@@ -42,7 +42,16 @@ export async function POST(req: NextRequest) {
       players,
       guilds = [],
     } = data;
+    console.log(guilds);
+    type PlayerLoginInfo = {
+      player_uid: string;
+      player_info: { last_online_real_time: number; player_name: string };
+    };
     const playerLoginTimes = guilds
+      .map((item) => item.players)
+      .reduce((pre: PlayerLoginInfo[], cur) => {
+        return pre.concat(cur);
+      }, [] as PlayerLoginInfo[])
       .map((item) => ({
         player_uid: item.player_uid,
         last_online_real_time: item.player_info?.last_online_real_time || 0,
@@ -57,19 +66,14 @@ export async function POST(req: NextRequest) {
       log(
         "debug",
         player,
-        convTime(
-          playerLoginTimes[player.playerUid]?.last_online_real_time || 0,
-          realTimeTick,
-          fileUtc
-        )
+        convTime(playerLoginTimes[player.playerUid] || 0, realTimeTick, fileUtc)
       );
       try {
-        // console.log(player);
         await savePlayer(
           handleRawSavedPlayer({
             ...player,
             last_login_at: convTime(
-              playerLoginTimes[player.playerUid]?.last_online_real_time || 0,
+              playerLoginTimes[player.playerUid] || 0,
               realTimeTick,
               fileUtc
             ),

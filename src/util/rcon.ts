@@ -3,7 +3,7 @@ import getConfig from "./getConfig";
 
 export default function sendRcon(
   cmd: string,
-  params?: Record<string, string | number>
+  params?: Record<string, string | number | undefined | boolean>
 ) {
   return new Promise((resolve, reject) => {
     const { RCON_LOCATION = "", RCON_ADMIN_PASSWORD = "" } = getConfig();
@@ -33,10 +33,14 @@ export default function sendRcon(
               conn.send(`${cmd} ${MessageText}`);
             }
             break;
-          case "KickPlayer":
           case "BanPlayer":
           case "TeleportToPlayer":
           case "TeleportToMe":
+          case "KickPlayer":
+            {
+              const { steamId } = params || {};
+              conn.send(`${cmd} ${steamId}`);
+            }
             const { SteamID } = params || {};
             conn.send(`${cmd} ${SteamID || ""}`);
             break;
@@ -69,7 +73,7 @@ export default function sendRcon(
           const keys = tableKeys.split(",").map((a) => a.trim());
           console.log(keys, rows);
           resolve(rows);
-          break
+          break;
         case "Broadcast":
           resolve(ret);
           break;

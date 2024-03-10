@@ -5,7 +5,6 @@ import log from "./log";
 
 export interface Player {
   id: number;
-  steam_id: string;
   mastered_waza?: string;
   equip_waza?: string;
   player_uid: string;
@@ -16,6 +15,7 @@ export interface Player {
   is_player: number; // 0 | 1
   instance_id: string;
   character_id: string;
+  steam_id?: string;
   last_login_at: string;
   hp: number;
   mp: number;

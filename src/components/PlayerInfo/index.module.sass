@@ -1,15 +1,27 @@
 .playerInfo
   display: flex
-  align-items: flex-start
+  flex-direction: column
+  align-items: space-between
   background: transparent
-  justify-content: space-between
+  justify-content: flex-start
 
   .left
     display: flex
-    flex-direction: column
     justify-content: flex-start
+    align-items: center
+    width: 100%
+
     .lower
       display: flex
       align-items: center
       div
         margin-right: 10px
+
+.uidTag
+  display: flex
+  align-items: center
+  .uid
+    font-size: 12px
+    line-height: 20px
+    margin: 0 !important
+    margin-left: 4px !important

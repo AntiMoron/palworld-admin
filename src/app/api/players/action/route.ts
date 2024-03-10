@@ -4,6 +4,7 @@ import {
   savePlayer,
   updatePlayerById,
 } from "@/util/player";
+import sendRcon from "@/util/rcon";
 
 export async function POST(res: Request) {
   const body = await getBody(res);
@@ -18,8 +19,12 @@ export async function POST(res: Request) {
       return Response.json({
         ok: true,
       });
-    } else if(action === 'kick') {
-      ;
+    } else if (action === "kick") {
+      const { steam_id: steamId } = await getPlayerByInstanceId(instanceId);
+      await sendRcon(`KickPlayer`, { steamId });
+      return Response.json({
+        ok: true,
+      });
     }
   } catch (err) {
     return Response.json({ error: (err as any)?.message }, { status: 400 });

@@ -1,11 +1,12 @@
 import { Player } from "@/util/player";
 import React from "react";
 import cx from "classnames";
-import { Typography, Button } from "antd";
+import { Typography, Button, Tag, Tooltip, Modal, message } from "antd";
 import styles from "./index.module.sass";
 import ExpBar from "../ExpBar";
 import i18n from "@/util/i18n";
 import Level from "../Level";
+import getDisplayPlayersUID from "@/util/getDisplayPlayerUID";
 
 const { Paragraph } = Typography;
 
@@ -36,39 +37,71 @@ export default function PlayerInfo(props: Props) {
             {nick_name}
           </div>
           <div className={styles.lower}>
-            {player_uid && <Paragraph copyable>{player_uid}</Paragraph>}
-            {steam_id && <Paragraph copyable>{steam_id}</Paragraph>}
-          </div>
-          <div>
-            <ExpBar exp={exp} />
+            {player_uid && (
+              <Tooltip title="Can be used in the game to teleport (to)">
+                <Tag color="blue" className={styles.uidTag}>
+                  UID:
+                  <Paragraph copyable className={styles.uid}>
+                    {getDisplayPlayersUID(player_uid)}{" "}
+                  </Paragraph>
+                </Tag>
+              </Tooltip>
+            )}
           </div>
         </div>
-        <Button.Group>
-          <Button type="link" onClick={onViewGuild}>
-            {i18n("view_guild")}
-          </Button>
-          <Button type="link" onClick={() => {}}>
-            踢出
-          </Button>
-          <Button
-            type="link"
-            onClick={() => {
-              fetch(`/api/players/action`, {
-                next: {
-                  revalidate: 0,
-                },
-                method: "POST",
-                body: JSON.stringify({
-                  instanceId: instance_id,
-                  action: "ban",
-                }),
-              });
-            }}
-          >
-            封禁
-          </Button>
-        </Button.Group>
+        <div>
+          <ExpBar exp={exp} />
+        </div>
       </div>
+      <Button.Group>
+        <Button onClick={onViewGuild}>{i18n("view_guild")}</Button>
+        <Button
+          onClick={() => {
+            Modal.confirm({
+              title: "Kick Player",
+              type: "warning",
+              content: "Are you sure you want to kick this player?",
+              onOk: () => {
+                fetch(`/api/players/action`, {
+                  next: {
+                    revalidate: 0,
+                  },
+                  method: "POST",
+                  body: JSON.stringify({
+                    instanceId: instance_id,
+                    action: "kick",
+                  }),
+                })
+                  .then(() => {
+                    message.success("Done");
+                  })
+                  .catch((err: Error) => {
+                    message.error(err?.message);
+                  });
+              },
+            });
+          }}
+        >
+          Kick
+        </Button>
+        <Button
+          danger
+          onClick={() => {
+            fetch(`/api/players/action`, {
+              next: {
+                revalidate: 0,
+              },
+              method: "POST",
+              body: JSON.stringify({
+                instanceId: instance_id,
+                action: "ban",
+              }),
+            });
+          }}
+        >
+          Ban
+        </Button>
+      </Button.Group>
       <div></div>
     </>
   );

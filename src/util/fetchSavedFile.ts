@@ -14,7 +14,7 @@ function getWorkTypeValue(craftSpeedsValue: any) {
     const { WorkSuitability, Rank } = value;
     const rank = unwrapValue(Rank);
     const workSuitabilityValue = unwrapValue(WorkSuitability);
-    console.log("unwrapped workSuitabilityValue: ", workSuitabilityValue);
+    // console.log("unwrapped workSuitabilityValue: ", workSuitabilityValue);
     const workSuitability = workSuitabilityValue?.value?.replace(
       "EPalWorkSuitability::",
       ""
@@ -197,9 +197,10 @@ export default function fetchSavedFile(fileDir: string) {
                 const players = characters
                   .filter((item: any) => item.IsPlayer)
                   .map((a: any) => {
-                    console.log(a);
+                    // console.log(a);
                     try {
                       a.steam_id = playerUidToSteamId(a.playerUid);
+                      console.log(a.steam_id);
                     } catch (err) {
                       log("error", err);
                     }
